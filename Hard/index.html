@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DOM Sikho — Bhai Style</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --card: #13131a;
+      --border: #2a2a3a;
+      --accent: #f0ff44;
+      --accent2: #ff4466;
+      --accent3: #44ddff;
+      --text: #e8e8f0;
+      --muted: #6b6b8a;
+      --code-bg: #0d1117;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Background grid */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(240,255,68,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(240,255,68,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* HEADER */
+    header {
+      padding: 60px 0 40px;
+      text-align: center;
+    }
+
+    .tag {
+      display: inline-block;
+      background: var(--accent);
+      color: #0a0a0f;
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 14px;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-size: clamp(2.5rem, 7vw, 5rem);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -2px;
+    }
+
+    h1 span { color: var(--accent); }
+    h1 em { color: var(--accent2); font-style: normal; }
+
+    .subtitle {
+      color: var(--muted);
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      margin-top: 16px;
+      letter-spacing: 1px;
+    }
+
+    /* SECTION HEADERS */
+    .section-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      margin-bottom: 24px;
+      letter-spacing: -1px;
+    }
+
+    /* CONCEPT CARDS */
+    .concept-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+
+    .concept-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 24px;
+      position: relative;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .concept-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+
+    .concept-card .num {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .concept-card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--accent3);
+      margin-bottom: 8px;
+    }
+    .concept-card p {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* CODE BLOCK */
+    .code-block {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      padding: 20px 24px;
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      line-height: 1.8;
+      overflow-x: auto;
+      margin: 12px 0 24px;
+      white-space: pre;
+    }
+
+    .kw { color: #ff79c6; }
+    .fn { color: #50fa7b; }
+    .str { color: #f1fa8c; }
+    .cm { color: #6272a4; font-style: italic; }
+    .var { color: var(--accent3); }
+    .prop { color: #ffb86c; }
+
+    /* LIVE PLAYGROUND */
+    .playground {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 32px;
+      margin-bottom: 48px;
+    }
+
+    .playground-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .playground-desc {
+      font-size: 0.82rem;
+      color: var(--muted);
+      font-family: 'Space Mono', monospace;
+      margin-bottom: 24px;
+    }
+
+    /* Demo 1: getElementById */
+    #demo-box {
+      background: #1a1a2e;
+      border: 2px dashed var(--border);
+      padding: 20px;
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--muted);
+      margin-bottom: 16px;
+      transition: all 0.3s;
+      min-height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 8px; }
+
+    .btn {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 10px 18px;
+      border: none;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.15s;
+    }
+    .btn-y { background: var(--accent); color: #0a0a0f; }
+    .btn-r { background: var(--accent2); color: #fff; }
+    .btn-b { background: var(--accent3); color: #0a0a0f; }
+    .btn-g { background: #50fa7b; color: #0a0a0f; }
+    .btn:hover { opacity: 0.85; transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+
+    /* Demo 2: createElement */
+    #list-container {
+      background: #1a1a2e;
+      border: 2px dashed var(--border);
+      padding: 20px;
+      min-height: 80px;
+      margin-bottom: 16px;
+    }
+    #list-container p { color: var(--muted); font-size: 0.85rem; font-family: 'Space Mono', monospace; }
+    .list-item {
+      background: var(--border);
+      padding: 10px 16px;
+      margin-bottom: 8px;
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      animation: slideIn 0.3s ease;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-10px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    .del-btn {
+      background: var(--accent2);
+      color: white;
+      border: none;
+      padding: 2px 10px;
+      cursor: pointer;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+    }
+
+    /* Demo 3: Events */
+    #event-box {
+      background: #1a1a2e;
+      border: 2px dashed var(--border);
+      padding: 30px;
+      text-align: center;
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      margin-bottom: 16px;
+      cursor: crosshair;
+      user-select: none;
+      min-height: 100px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    #event-log {
+      color: var(--accent);
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+    #click-count {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    /* Demo 4: classList */
+    #style-box {
+      padding: 24px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 16px;
+      background: #1a1a2e;
+      border: 2px dashed var(--border);
+      transition: all 0.3s;
+    }
+
+    /* Demo 5: querySelector */
+    .qs-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .qs-item {
+      padding: 10px 16px;
+      border: 1px solid var(--border);
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .qs-item.active { border-color: var(--accent); color: var(--accent); background: rgba(240,255,68,0.08); }
+
+    /* Demo 6: innerHTML vs textContent */
+    #inner-display {
+      background: #1a1a2e;
+      border: 2px dashed var(--border);
+      padding: 16px;
+      font-size: 0.9rem;
+      min-height: 60px;
+      margin-bottom: 12px;
+      line-height: 1.6;
+    }
+    .input-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .input-row input {
+      flex: 1;
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      padding: 10px 14px;
+      outline: none;
+    }
+    .input-row input:focus { border-color: var(--accent); }
+
+    /* REFERENCE TABLE */
+    .ref-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      margin-bottom: 48px;
+    }
+    .ref-table th {
+      background: var(--border);
+      color: var(--accent);
+      padding: 12px 16px;
+      text-align: left;
+      letter-spacing: 1px;
+      font-size: 11px;
+    }
+    .ref-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      color: var(--muted);
+      vertical-align: top;
+    }
+    .ref-table tr:hover td { background: var(--card); }
+    .ref-table td:first-child { color: var(--accent3); }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 40px 0;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      letter-spacing: 1px;
+    }
+    footer span { color: var(--accent); }
+
+    .section { margin-bottom: 56px; }
+
+    @media (max-width: 600px) {
+      .concept-grid { grid-template-columns: 1fr; }
+      .input-row { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <header>
+    <div class="tag">// JavaScript</div>
+    <h1><span>DOM</span><br>Sikho<br><em>Bhai.</em></h1>
+    <p class="subtitle">// Document Object Model — Interactive Guide</p>
+  </header>
+
+  <!-- CONCEPTS -->
+  <section class="section">
+    <p class="section-label">01 — Basics</p>
+    <h2>DOM Kya Hota Hai?</h2>
+    <p style="color: var(--muted); font-size:0.9rem; line-height:1.8; margin-bottom: 24px;">
+      Browser jab HTML page load karta hai, toh ek <strong style="color:var(--accent)">tree structure</strong> banata hai
+      — isko <strong style="color:var(--accent3)">DOM (Document Object Model)</strong> kehte hain.
+      JavaScript se hum is tree ke kisi bhi node ko pakad sakte hain, badal sakte hain, add ya delete kar sakte hain.
+    </p>
+
+    <div class="concept-grid">
+      <div class="concept-card">
+        <div class="num">01</div>
+        <h3>document object</h3>
+        <p>Poore page ka entry point. Sab kuch iske andar hota hai. <code style="color:var(--accent)">document.body</code>, <code style="color:var(--accent)">document.title</code> etc.</p>
+      </div>
+      <div class="concept-card">
+        <div class="num">02</div>
+        <h3>Element Select Karna</h3>
+        <p>getElementById, querySelector, querySelectorAll se kisi bhi HTML element ko pakdo.</p>
+      </div>
+      <div class="concept-card">
+        <div class="num">03</div>
+        <h3>Element Banana & Hatana</h3>
+        <p>createElement se naye elements banao, appendChild se lagao, remove() se hatao.</p>
+      </div>
+      <div class="concept-card">
+        <div class="num">04</div>
+        <h3>Events</h3>
+        <p>addEventListener se user ke actions (click, keypress, scroll) pe react karo.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEMO 1: getElementById + innerHTML + style -->
+  <section class="section">
+    <p class="section-label">02 — Live Demo</p>
+    <h2>getElementById & Style Change</h2>
+
+    <div class="code-block"><span class="cm">// Element pakdo aur badlo</span>
+<span class="kw">const</span> <span class="var">box</span> = document.<span class="fn">getElementById</span>(<span class="str">'demo-box'</span>);
+
+box.<span class="prop">innerHTML</span>  = <span class="str">'Naya content!'</span>;
+box.<span class="prop">style</span>.<span class="prop">color</span> = <span class="str">'#f0ff44'</span>;
+box.<span class="prop">style</span>.<span class="prop">background</span> = <span class="str">'#1a2a00'</span>;</div>
+
+    <div class="playground">
+      <div class="playground-title">🧪 Try Karo</div>
+      <div class="playground-desc">// Buttons dabao aur dekho DOM kaise change hota hai</div>
+
+      <div id="demo-box">Main ek div hoon 👋</div>
+      <div class="btn-row">
+        <button class="btn btn-y" onclick="changeText()">Text Badlo</button>
+        <button class="btn btn-r" onclick="changeColor()">Color Badlo</button>
+        <button class="btn btn-b" onclick="changeSize()">Size Badlo</button>
+        <button class="btn btn-g" onclick="resetBox()">Reset</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEMO 2: createElement / appendChild / remove -->
+  <section class="section">
+    <p class="section-label">03 — Create & Delete</p>
+    <h2>createElement & remove()</h2>
+
+    <div class="code-block"><span class="cm">// Naya element banao</span>
+<span class="kw">const</span> <span class="var">li</span> = document.<span class="fn">createElement</span>(<span class="str">'li'</span>);
+<span class="var">li</span>.<span class="prop">textContent</span> = <span class="str">'Naya item!'</span>;
+
+<span class="cm">// Parent mein lagao</span>
+<span class="var">list</span>.<span class="fn">appendChild</span>(<span class="var">li</span>);
+
+<span class="cm">// Element hatao</span>
+<span class="var">li</span>.<span class="fn">remove</span>();</div>
+
+    <div class="playground">
+      <div class="playground-title">🏗️ DOM Builder</div>
+      <div class="playground-desc">// Item add karo aur ❌ se delete karo</div>
+
+      <div id="list-container"><p>// Koi item nahi hai abhi. Neeche button dabao!</p></div>
+      <div class="input-row">
+        <input type="text" id="item-input" placeholder="Kuch likho..." onkeydown="if(event.key==='Enter') addItem()"/>
+        <button class="btn btn-y" onclick="addItem()">Add Item</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEMO 3: addEventListener -->
+  <section class="section">
+    <p class="section-label">04 — Events</p>
+    <h2>addEventListener</h2>
+
+    <div class="code-block"><span class="cm">// Events listen karo</span>
+<span class="kw">const</span> <span class="var">box</span> = document.<span class="fn">querySelector</span>(<span class="str">'#event-box'</span>);
+
+<span class="var">box</span>.<span class="fn">addEventListener</span>(<span class="str">'click'</span>, <span class="kw">function</span>() {
+  console.<span class="fn">log</span>(<span class="str">'Click hua!'</span>);
+});
+
+<span class="var">box</span>.<span class="fn">addEventListener</span>(<span class="str">'mouseover'</span>, <span class="kw">() =></span> {
+  <span class="cm">// hover pe kuch karo</span>
+});</div>
+
+    <div class="playground">
+      <div class="playground-title">🖱️ Event Zone</div>
+      <div class="playground-desc">// Box pe click karo, hover karo — events pakde jaenge</div>
+
+      <div id="event-box"
+        onclick="handleClick()"
+        onmouseover="handleHover()"
+        onmouseout="handleOut()">
+        <div id="event-log">Yahan kuch karo...</div>
+        <div id="click-count">Click count: 0</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEMO 4: classList -->
+  <section class="section">
+    <p class="section-label">05 — classList</p>
+    <h2>classList.add / remove / toggle</h2>
+
+    <div class="code-block"><span class="cm">// CSS classes dynamically manage karo</span>
+<span class="kw">const</span> <span class="var">el</span> = document.<span class="fn">getElementById</span>(<span class="str">'style-box'</span>);
+
+<span class="var">el</span>.<span class="prop">classList</span>.<span class="fn">add</span>(<span class="str">'active'</span>);     <span class="cm">// class lagao</span>
+<span class="var">el</span>.<span class="prop">classList</span>.<span class="fn">remove</span>(<span class="str">'active'</span>);  <span class="cm">// class hatao</span>
+<span class="var">el</span>.<span class="prop">classList</span>.<span class="fn">toggle</span>(<span class="str">'dark'</span>);   <span class="cm">// on/off karo</span>
+<span class="var">el</span>.<span class="prop">classList</span>.<span class="fn">contains</span>(<span class="str">'dark'</span>); <span class="cm">// check karo</span></div>
+
+    <div class="playground">
+      <div class="playground-title">🎨 Class Toggle</div>
+      <div class="playground-desc">// classList se appearance badlo</div>
+
+      <div id="style-box">Mujhe style karo!</div>
+      <div class="btn-row">
+        <button class="btn btn-y" onclick="toggleYellow()">Yellow Toggle</button>
+        <button class="btn btn-r" onclick="toggleRed()">Red Toggle</button>
+        <button class="btn btn-b" onclick="toggleBlue()">Blue Toggle</button>
+        <button class="btn btn-g" onclick="toggleBig()">Size Toggle</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEMO 5: querySelector -->
+  <section class="section">
+    <p class="section-label">06 — querySelector</p>
+    <h2>querySelector & querySelectorAll</h2>
+
+    <div class="code-block"><span class="cm">// CSS selector se pakdo (sirf pehla)</span>
+<span class="kw">const</span> <span class="var">el</span> = document.<span class="fn">querySelector</span>(<span class="str">'.card'</span>);
+
+<span class="cm">// Saare matching elements (NodeList)</span>
+<span class="kw">const</span> <span class="var">all</span> = document.<span class="fn">querySelectorAll</span>(<span class="str">'.card'</span>);
+
+<span class="cm">// Loop karo</span>
+<span class="var">all</span>.<span class="fn">forEach</span>(<span class="var">el</span> <span class="kw">=></span> {
+  <span class="var">el</span>.<span class="prop">style</span>.<span class="prop">border</span> = <span class="str">'2px solid yellow'</span>;
+});</div>
+
+    <div class="playground">
+      <div class="playground-title">🔍 Selector Game</div>
+      <div class="playground-desc">// Item click karo — querySelector inhe pakdega</div>
+
+      <div class="qs-items" id="qs-container">
+        <div class="qs-item" onclick="selectItem(this)">HTML</div>
+        <div class="qs-item" onclick="selectItem(this)">CSS</div>
+        <div class="qs-item" onclick="selectItem(this)">JavaScript</div>
+        <div class="qs-item" onclick="selectItem(this)">DOM</div>
+        <div class="qs-item" onclick="selectItem(this)">Events</div>
+        <div class="qs-item" onclick="selectItem(this)">React</div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-y" onclick="selectAll()">Sabko Select</button>
+        <button class="btn btn-r" onclick="deselectAll()">Sabko Deselect</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEMO 6: innerHTML vs textContent -->
+  <section class="section">
+    <p class="section-label">07 — Content</p>
+    <h2>innerHTML vs textContent</h2>
+
+    <div class="code-block"><span class="cm">// innerHTML — HTML tags bhi render hote hain</span>
+<span class="var">el</span>.<span class="prop">innerHTML</span> = <span class="str">'&lt;strong&gt;Bold!&lt;/strong&gt;'</span>;
+
+<span class="cm">// textContent — sirf plain text, safe!</span>
+<span class="var">el</span>.<span class="prop">textContent</span> = <span class="str">'&lt;strong&gt;Bold!&lt;/strong&gt;'</span>;
+<span class="cm">// Yeh actual text show karega, HTML nahi</span></div>
+
+    <div class="playground">
+      <div class="playground-title">✍️ Content Demo</div>
+      <div class="playground-desc">// Try karo: &lt;b&gt;bold&lt;/b&gt; ya &lt;i&gt;italic&lt;/i&gt; likho</div>
+
+      <div id="inner-display">Yahan content aayega...</div>
+      <div class="input-row">
+        <input type="text" id="content-input" placeholder="HTML tag likhke try karo: <b>bold</b>"/>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-y" onclick="setInnerHTML()">innerHTML (renders HTML)</button>
+        <button class="btn btn-r" onclick="setTextContent()">textContent (plain text)</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUICK REFERENCE TABLE -->
+  <section class="section">
+    <p class="section-label">08 — Reference</p>
+    <h2>Quick Reference</h2>
+    <table class="ref-table">
+      <thead>
+        <tr>
+          <th>Method / Property</th>
+          <th>Kya karta hai</th>
+          <th>Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>getElementById()</td><td>ID se element pakdo</td><td>document.getElementById('box')</td></tr>
+        <tr><td>querySelector()</td><td>CSS selector se pehla element</td><td>document.querySelector('.btn')</td></tr>
+        <tr><td>querySelectorAll()</td><td>Saare matching elements</td><td>document.querySelectorAll('li')</td></tr>
+        <tr><td>createElement()</td><td>Naya HTML element banao</td><td>document.createElement('div')</td></tr>
+        <tr><td>appendChild()</td><td>Child add karo element mein</td><td>parent.appendChild(child)</td></tr>
+        <tr><td>remove()</td><td>Element delete karo DOM se</td><td>el.remove()</td></tr>
+        <tr><td>innerHTML</td><td>HTML content get/set karo</td><td>el.innerHTML = '&lt;b&gt;Hi&lt;/b&gt;'</td></tr>
+        <tr><td>textContent</td><td>Plain text get/set karo</td><td>el.textContent = 'Hello'</td></tr>
+        <tr><td>style.property</td><td>Inline CSS change karo</td><td>el.style.color = 'red'</td></tr>
+        <tr><td>classList.add()</td><td>CSS class lagao</td><td>el.classList.add('active')</td></tr>
+        <tr><td>classList.remove()</td><td>CSS class hatao</td><td>el.classList.remove('active')</td></tr>
+        <tr><td>classList.toggle()</td><td>Class on/off karo</td><td>el.classList.toggle('dark')</td></tr>
+        <tr><td>addEventListener()</td><td>Event listen karo</td><td>el.addEventListener('click', fn)</td></tr>
+        <tr><td>getAttribute()</td><td>HTML attribute read karo</td><td>el.getAttribute('href')</td></tr>
+        <tr><td>setAttribute()</td><td>HTML attribute set karo</td><td>el.setAttribute('id', 'new')</td></tr>
+        <tr><td>parentElement</td><td>Parent element pakdo</td><td>el.parentElement</td></tr>
+        <tr><td>children</td><td>Saare child elements</td><td>el.children</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <footer>
+    <p>Banaya gaya with 🔥 for learning &nbsp;|&nbsp; <span>DOM Sikho — Bhai Style</span></p>
+    <p style="margin-top:8px;">Console kholo (F12) aur khelte raho!</p>
+  </footer>
+
+</div>
+
+<script>
+  // ── DEMO 1: getElementById ──
+  let clickNum = 0;
+  const texts = ['Arre bhai! 🎉', 'DOM ne kaam kiya!', 'innerHTML se badla!', 'Mast hai na? 🔥'];
+  const colors = ['#f0ff44', '#ff4466', '#44ddff', '#50fa7b'];
+
+  function changeText() {
+    const box = document.getElementById('demo-box');
+    box.innerHTML = texts[clickNum % texts.length];
+    clickNum++;
+  }
+
+  function changeColor() {
+    const box = document.getElementById('demo-box');
+    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+    box.style.color = randomColor;
+    box.style.borderColor = randomColor;
+    box.style.textShadow = `0 0 20px ${randomColor}66`;
+  }
+
+  function changeSize() {
+    const box = document.getElementById('demo-box');
+    const sizes = ['1rem', '1.5rem', '2rem', '0.8rem'];
+    const curr = box.dataset.si || 0;
+    box.style.fontSize = sizes[curr % sizes.length];
+    box.dataset.si = (parseInt(curr) + 1);
+  }
+
+  function resetBox() {
+    const box = document.getElementById('demo-box');
+    box.innerHTML = 'Main ek div hoon 👋';
+    box.style.cssText = '';
+    clickNum = 0;
+  }
+
+  // ── DEMO 2: createElement ──
+  let itemCount = 0;
+  const fruits = ['Mango 🥭', 'Chai ☕', 'Samosa 🥟', 'Dosa 🥞', 'Biryani 🍛', 'Lassi 🥛'];
+
+  function addItem() {
+    const input = document.getElementById('item-input');
+    const container = document.getElementById('list-container');
+
+    let text = input.value.trim();
+    if (!text) text = fruits[itemCount % fruits.length];
+    input.value = '';
+
+    // Clear placeholder
+    const placeholder = container.querySelector('p');
+    if (placeholder) placeholder.remove();
+
+    const div = document.createElement('div');
+    div.className = 'list-item';
+    div.innerHTML = `
+      <span>${++itemCount}. ${text}</span>
+      <button class="del-btn" onclick="this.parentElement.remove()">❌</button>
+    `;
+    container.appendChild(div);
+    input.focus();
+  }
+
+  // ── DEMO 3: Events ──
+  let clicks = 0;
+
+  function handleClick() {
+    clicks++;
+    const log = document.getElementById('event-log');
+    const count = document.getElementById('click-count');
+    const emojis = ['💥', '🔥', '⚡', '🎯', '💫', '🚀'];
+    log.textContent = `CLICK event fired! ${emojis[clicks % emojis.length]}`;
+    log.style.color = '#f0ff44';
+    count.textContent = `Click count: ${clicks}`;
+  }
+
+  function handleHover() {
+    document.getElementById('event-log').textContent = '🖱️ MOUSEOVER event!';
+    document.getElementById('event-log').style.color = '#44ddff';
+    document.getElementById('event-box').style.borderColor = '#44ddff';
+    document.getElementById('event-box').style.background = '#001a2a';
+  }
+
+  function handleOut() {
+    document.getElementById('event-log').textContent = 'MOUSEOUT event — bahar gaye!';
+    document.getElementById('event-log').style.color = '#ff4466';
+    document.getElementById('event-box').style.borderColor = 'var(--border)';
+    document.getElementById('event-box').style.background = '#1a1a2e';
+  }
+
+  // ── DEMO 4: classList ──
+  function toggleYellow() {
+    const b = document.getElementById('style-box');
+    if (b.classList.contains('cl-yellow')) {
+      b.classList.remove('cl-yellow');
+      b.style.background = '#1a1a2e';
+      b.style.color = 'var(--text)';
+      b.textContent = 'Yellow class hatayi!';
+    } else {
+      b.classList.add('cl-yellow');
+      b.style.background = '#2a2a00';
+      b.style.color = '#f0ff44';
+      b.style.borderColor = '#f0ff44';
+      b.textContent = 'classList.add("yellow") ✅';
+    }
+  }
+
+  function toggleRed() {
+    const b = document.getElementById('style-box');
+    if (b.classList.contains('cl-red')) {
+      b.classList.remove('cl-red');
+      b.style.background = '#1a1a2e';
+      b.style.color = 'var(--text)';
+      b.textContent = 'Red class hatayi!';
+    } else {
+      b.classList.add('cl-red');
+      b.style.background = '#2a0010';
+      b.style.color = '#ff4466';
+      b.style.borderColor = '#ff4466';
+      b.textContent = 'classList.add("red") ✅';
+    }
+  }
+
+  function toggleBlue() {
+    const b = document.getElementById('style-box');
+    if (b.classList.contains('cl-blue')) {
+      b.classList.remove('cl-blue');
+      b.style.background = '#1a1a2e';
+      b.style.color = 'var(--text)';
+      b.textContent = 'Blue class hatayi!';
+    } else {
+      b.classList.add('cl-blue');
+      b.style.background = '#001a2a';
+      b.style.color = '#44ddff';
+      b.style.borderColor = '#44ddff';
+      b.textContent = 'classList.add("blue") ✅';
+    }
+  }
+
+  function toggleBig() {
+    const b = document.getElementById('style-box');
+    b.classList.toggle('cl-big');
+    if (b.classList.contains('cl-big')) {
+      b.style.fontSize = '2rem';
+      b.style.padding = '40px';
+      b.textContent = 'classList.toggle() → BIG! 📏';
+    } else {
+      b.style.fontSize = '';
+      b.style.padding = '24px';
+      b.textContent = 'classList.toggle() → Normal size!';
+    }
+  }
+
+  // ── DEMO 5: querySelector ──
+  function selectItem(el) {
+    el.classList.toggle('active');
+    updateQsStatus();
+  }
+
+  function selectAll() {
+    document.querySelectorAll('.qs-item').forEach(el => el.classList.add('active'));
+    updateQsStatus();
+  }
+
+  function deselectAll() {
+    document.querySelectorAll('.qs-item').forEach(el => el.classList.remove('active'));
+    updateQsStatus();
+  }
+
+  function updateQsStatus() {
+    const total = document.querySelectorAll('.qs-item').length;
+    const selected = document.querySelectorAll('.qs-item.active').length;
+    console.log(`querySelectorAll → Total: ${total}, Selected: ${selected}`);
+  }
+
+  // ── DEMO 6: innerHTML vs textContent ──
+  function setInnerHTML() {
+    const input = document.getElementById('content-input').value;
+    document.getElementById('inner-display').innerHTML =
+      input || '<b>Bold!</b> aur <i>Italic!</i> — innerHTML ne render kiya!';
+  }
+
+  function setTextContent() {
+    const input = document.getElementById('content-input').value;
+    document.getElementById('inner-display').textContent =
+      input || '<b>Bold!</b> — textContent ne plain text show kiya, HTML nahi!';
+  }
+</script>
+</body>
+</html>

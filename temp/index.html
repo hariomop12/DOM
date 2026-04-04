@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lesson 2 - querySelector</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+      background: #f5f5f5;
+    }
+
+    h2 { margin-top: 40px; color: #333; }
+
+    .box {
+      background: lightblue;
+      padding: 15px;
+      margin: 5px;
+      width: 200px;
+    }
+
+    #specialBox {
+      background: lightgreen;
+      padding: 15px;
+      margin: 5px;
+      width: 200px;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin: 5px;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    #output {
+      background: black;
+      color: lime;
+      padding: 15px;
+      font-family: monospace;
+      font-size: 15px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Lesson 2 — querySelector & querySelectorAll</h1>
+
+  <!-- ============================================
+    PART 1 — querySelector
+    Kya karta hai: CSS selector se PEHLA match dhundta hai
+    Syntax: document.querySelector('selector')
+  ============================================= -->
+
+  <h2>Part 1 — querySelector (sirf pehla element)</h2>
+
+  <div class="box">Box 1 — class="box"</div>
+  <div class="box">Box 2 — class="box"</div>
+  <div class="box">Box 3 — class="box"</div>
+  <div id="specialBox">Special Box — id="specialBox"</div>
+
+  <br>
+  <button onclick="selectByClass()">querySelector .box</button>
+  <button onclick="selectById()">querySelector #specialBox</button>
+
+  <div id="output">// Yahan result aayega...</div>
+
+
+  <!-- ============================================
+    PART 2 — querySelectorAll
+    Kya karta hai: CSS selector se SAARE match dhundta hai
+    Returns: NodeList (array jaisi cheez)
+  ============================================= -->
+
+  <h2>Part 2 — querySelectorAll (saare elements)</h2>
+
+  <button onclick="selectAllBoxes()">querySelectorAll .box</button>
+  <button onclick="resetAll()">Reset Sab</button>
+
+
+  <script>
+
+    // ------------------------------------------
+    // PART 1 — querySelector
+    // ------------------------------------------
+
+    function selectByClass() {
+
+      // .box likhne se CLASS select hoti hai
+      // Yeh sirf PEHLA .box element return karega
+      let firstBox = document.querySelector('.box')
+
+      firstBox.style.background = 'orange'
+      firstBox.innerHTML = 'Mujhe querySelector ne pakda! (pehla)'
+
+      document.getElementById('output').innerHTML =
+        "let firstBox = document.querySelector('.box') <br>" +
+        "// Sirf pehla .box mila — baaki nahi"
+    }
+
+    function selectById() {
+
+      // #specialBox likhne se ID select hoti hai
+      let special = document.querySelector('#specialBox')
+
+      special.style.background = 'violet'
+      special.innerHTML = 'ID se pakda gaya! ✅'
+
+      document.getElementById('output').innerHTML =
+        "let special = document.querySelector('#specialBox') <br>" +
+        "// # matlab ID, . matlab Class"
+    }
+
+
+    // ------------------------------------------
+    // PART 2 — querySelectorAll
+    // ------------------------------------------
+
+    function selectAllBoxes() {
+
+      // querySelectorAll saare .box elements ek NodeList mein deta hai
+      let allBoxes = document.querySelectorAll('.box')
+
+      // NodeList pe forEach chalate hain — ek ek element milta hai
+      allBoxes.forEach(function(box, index) {
+        box.style.background = 'salmon'
+        box.innerHTML = 'Box number: ' + index
+      })
+
+      document.getElementById('output').innerHTML =
+        "let allBoxes = document.querySelectorAll('.box') <br>" +
+        "allBoxes.forEach(function(box, index) { <br>" +
+        "&nbsp;&nbsp;box.style.background = 'salmon' <br>" +
+        "}) <br>" +
+        "// Total boxes mile: " + allBoxes.length
+    }
+
+
+    // ------------------------------------------
+    // Reset function
+    // ------------------------------------------
+
+    function resetAll() {
+
+      // Saare .box reset
+      let allBoxes = document.querySelectorAll('.box')
+      allBoxes.forEach(function(box, i) {
+        box.style.background = 'lightblue'
+        box.innerHTML = 'Box ' + (i + 1) + ' — class="box"'
+      })
+
+      // Special box reset
+      let special = document.querySelector('#specialBox')
+      special.style.background = 'lightgreen'
+      special.innerHTML = 'Special Box — id="specialBox"'
+
+      document.getElementById('output').innerHTML = '// Reset ho gaya!'
+    }
+
+  </script>
+
+</body>
+</html>
