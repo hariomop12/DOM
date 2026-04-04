@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lesson 3 - getElementsByClassName & Tag</title>
+    <style>
+      body {
+        font-family: monospace;
+        padding: 30px;
+        background: #f5f5f5;
+      }
+
+      h2 {
+        margin-top: 40px;
+        color: #333;
+      }
+
+      .fruit {
+        background: lightblue;
+        padding: 12px;
+        margin: 5px;
+        width: 200px;
+      }
+
+      .veggie {
+        background: lightblue;
+        padding: 12px;
+        margin: 5px;
+        width: 200px;
+      }
+
+      button {
+        padding: 10px 20px;
+        color: lime;
+        padding: 15px;
+        font-family: monospace;
+        font-size: 15px;
+        margin-top: 10px;
+        min-height: 50px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Lesson 3 - getElementsByClassName and getElementsByTagName</h1>
+
+    <!-- =================================
+        PART 1 - getElementByClassName
+        ky krta hai: find all element by class name
+        return: HTMLCollection (live Collection)
+        diffrent from querySelector - it only takes class name, no dot (.)
+    ======================================-->
+
+    <h2>Part 1 - getElementByClassName</h2>
+    <div class="fruit">🍎 Apple</div>
+    <div class="fruit">🍌 Banana</div>
+    <div class="fruit">🍊 Orange</div>
+    <div class="veggie">🥕 Carrot</div>
+    <div class="veggie">🥦 Broccoli</div>
+
+    <br />
+    <button onclick="selectFruits()">getElementsByClassName 'fruit'</button>
+    <button onclick="selectVeggies()">getElementByClassName</button>
+    <button onclick="resetPart1()">Reset</button>
+    <div id="output">// Yahan result aayega...</div>
+
+    <!-- =======================================
+     PART - 2 getElementByTagName
+     what it did - find all element by tag name
+     Return- HTMLCollection (live collection)
+     Element: 'p' 'div' 'h2' 'li' etc
+    =============================================-->
+
+    <h2>Part 2 - getElementByTagName</h2>
+    <p>It is first paragrapg</p>
+    <p>It is second paragrapg</p>
+    <p>It is third paragrapg</p>
+
+    <br />
+
+    <button onclick="selectAllP()">getElementByTahName 'p'</button>
+    <button onclick="selectAllDiv()">getElementByTahName 'div'</button>
+    <button onclick="resetPart2()">Reset Part 2</button>
+
+    <!-- ==========================================
+     PART 3 - querySelector vs getElementByClassName
+     See cleary diffrence 
+    ============================================-->
+
+    <h2>Part 3 - what is diffrence ? querySelector vs getElementByClassName</h2>
+
+    <div
+      class="box"
+      style="background: lightpink; padding: 12px; margin: 5px; width: 200px"
+    >
+      Yellow Box 1
+    </div>
+    <div
+      class="box"
+      style="background: lightpink; padding: 12px; margin: 5px; width: 200px"
+    >
+      Yellow Box 2
+    </div>
+    <br />
+
+    <button onclick="showFark()">See Difference</button>
+
+    <script>
+      // ------------------------------------------
+      // PART 1 - getElementByClassName
+      // ------------------------------------------
+
+      function selectFruits() {
+        // Note: if we write 'fruit' so cant use dot (.) unlike querySlector
+
+        let fruits = document.getElementsByClassName("fruit");
+        // HTMLCollection forEach not apply here
+        // make Array.from() first
+        Array.from(fruits).forEach(function (el) {
+          el.style.background = "orange";
+          el.style.fontWeight = "bold";
+        });
+
+        document.getElementById("output").innerHTML =
+          "let fruits = document.getElementsByClassName('fruit') <br>" +
+          "// Dot (.) nahi lagate yahan! <br>" +
+          "// Total mile: " +
+          fruits.length +
+          " <br>" +
+          "// Returns: HTMLCollection — Array.from() se convert karo";
+      }
+
+      function selectVeggies() {
+        let veggies = document.getElementsByClassName("veggie");
+
+        Array.from(veggies).forEach(function (el) {
+          el.style.background = "limegreen";
+          el.style.fontWeight = "bold";
+        });
+
+        document.getElementById("output").innerHTML =
+          "let veggies = document.getElementsByClassName('veggie') <br>" +
+          "// Total mile: " +
+          veggies.length;
+      }
+
+      function resetPart1() {
+        Array.from(document.getElementsByClassName("fruit")).forEach(
+          function (el) {
+            el.style.background = "lightblue";
+            el.style.fontWeight = "normal";
+          },
+        );
+
+        Array.from(document.getElementsByClassName("veggie")).forEach(
+          function (el) {
+            el.style.background = "lightgreen";
+            el.style.fontWeight = "normal";
+          },
+        );
+
+        document.getElementById("output").innerHTML = "// Reset!";
+      }
+
+      // ----------------------------------------------
+      // PART 2 - getElementByTagName
+      // ----------------------------------------------
+
+      function selectAllP() {
+        // 'p' give us all paragrapg elemement milenge
+        let paragraphs = document.getElementsByTagName("p");
+
+        Array.from(paragraphs).forEach(function (el, index) {
+          el.style.background = "lightyellow";
+          el.style.padding = "8px";
+          el.innerHTML = "Paragraph " + (index + 1) + "-- tag se pakda gaya!";
+        });
+
+        document.getElementById("output").innerHTML =
+          ` let paragraphs = document.getElementsByTagName('p')
+
+        Array.from(paragraphs).forEach(function(el, index) {
+          el.style.background = 'lightyellow'
+          el.style.padding = '8px'
+          el.innerHTML = 'Paragraph ' + (index + 1 ) + '-- tag se pakda gaya!'
+        })`;
+      }
+
+      function selectAllDiv() {
+        let divs = document.getElementsByTagName("div");
+
+        document.getElementById("output").innerHTML =
+          `  "let divs = document.getElementsByTagName('div') <br>" +
+        "// Page pe total divs hain: " + divs.length + " <br>" +
+        "// (output box bhi ek div hai isliye count zyada hai!)"
+        
+        `;
+      }
+
+      function resetPart2() {
+        let paragraphs = document.getElementsByTagName("p");
+        let texts = [
+          "Yeh pehla paragraph hai.",
+          "Yeh doosra paragraph hai.",
+          "Yeh teesra paragraph hai.",
+        ];
+        Array.from(paragraphs).forEach(function (el, i) {
+          el.style.background = "";
+          el.style.padding = "";
+          el.innerHTML = texts[i];
+        });
+        document.getElementById("output").innerHTML = "// Reset !";
+      }
+
+      // ----------------------------------
+      // PART 3 - Fark
+      // ------------------------------------
+      function showFark() {
+        let first = document.querySelector(".box");
+        first.style.background = "salmon";
+        first.innerHTML = "querySelector - only first";
+
+        let allBoxes = document.getElementsByClassName("box");
+
+        allBoxes[1].style.background = "violet";
+        allBoxes[1].innerHTML = "getElementsByClassName — index se pakda!";
+
+        document.getElementById("output").innerHTML =
+          "querySelector('.box') → dot lagate hain, pehla element <br>" +
+          "getElementsByClassName('box') → dot nahi, returns HTMLCollection";
+      }
+    </script>
+  </body>
+</html>

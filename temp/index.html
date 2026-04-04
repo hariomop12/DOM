@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Lesson 2 - querySelector</title>
+  <title>Lesson 3 - getElementsByClassName & Tag</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -12,16 +12,16 @@
 
     h2 { margin-top: 40px; color: #333; }
 
-    .box {
+    .fruit {
       background: lightblue;
-      padding: 15px;
+      padding: 12px;
       margin: 5px;
       width: 200px;
     }
 
-    #specialBox {
+    .veggie {
       background: lightgreen;
-      padding: 15px;
+      padding: 12px;
       margin: 5px;
       width: 200px;
     }
@@ -40,122 +40,189 @@
       font-family: monospace;
       font-size: 15px;
       margin-top: 10px;
+      min-height: 50px;
     }
   </style>
 </head>
 <body>
 
-  <h1>Lesson 2 — querySelector & querySelectorAll</h1>
+  <h1>Lesson 3 — getElementsByClassName & getElementsByTagName</h1>
 
   <!-- ============================================
-    PART 1 — querySelector
-    Kya karta hai: CSS selector se PEHLA match dhundta hai
-    Syntax: document.querySelector('selector')
+    PART 1 — getElementsByClassName
+    Kya karta hai: Class name se SAARE elements dhundta hai
+    Returns: HTMLCollection (live collection)
+    querySelector se fark: yeh sirf class name leta hai, no dot (.)
   ============================================= -->
 
-  <h2>Part 1 — querySelector (sirf pehla element)</h2>
+  <h2>Part 1 — getElementsByClassName</h2>
 
-  <div class="box">Box 1 — class="box"</div>
-  <div class="box">Box 2 — class="box"</div>
-  <div class="box">Box 3 — class="box"</div>
-  <div id="specialBox">Special Box — id="specialBox"</div>
+  <div class="fruit">🍎 Apple</div>
+  <div class="fruit">🍌 Banana</div>
+  <div class="fruit">🍊 Orange</div>
+  <div class="veggie">🥕 Carrot</div>
+  <div class="veggie">🥦 Broccoli</div>
 
   <br>
-  <button onclick="selectByClass()">querySelector .box</button>
-  <button onclick="selectById()">querySelector #specialBox</button>
+  <button onclick="selectFruits()">getElementsByClassName 'fruit'</button>
+  <button onclick="selectVeggies()">getElementsByClassName 'veggie'</button>
+  <button onclick="resetPart1()">Reset</button>
 
   <div id="output">// Yahan result aayega...</div>
 
 
   <!-- ============================================
-    PART 2 — querySelectorAll
-    Kya karta hai: CSS selector se SAARE match dhundta hai
-    Returns: NodeList (array jaisi cheez)
+    PART 2 — getElementsByTagName
+    Kya karta hai: HTML tag se SAARE elements dhundta hai
+    Returns: HTMLCollection (live collection)
+    Example: 'p', 'div', 'h2', 'li' etc
   ============================================= -->
 
-  <h2>Part 2 — querySelectorAll (saare elements)</h2>
+  <h2>Part 2 — getElementsByTagName</h2>
 
-  <button onclick="selectAllBoxes()">querySelectorAll .box</button>
-  <button onclick="resetAll()">Reset Sab</button>
+  <p>Yeh pehla paragraph hai.</p>
+  <p>Yeh doosra paragraph hai.</p>
+  <p>Yeh teesra paragraph hai.</p>
+
+  <br>
+  <button onclick="selectAllP()">getElementsByTagName 'p'</button>
+  <button onclick="selectAllDiv()">getElementsByTagName 'div'</button>
+  <button onclick="resetPart2()">Reset Part 2</button>
+
+
+  <!-- ============================================
+    PART 3 — querySelector vs getElementsByClassName
+    Dono ka fark clearly samjho
+  ============================================= -->
+
+  <h2>Part 3 — Fark kya hai? querySelector vs getElementsByClassName</h2>
+
+  <div class="box" style="background:lightyellow; padding:12px; margin:5px; width:200px;">Yellow Box 1</div>
+  <div class="box" style="background:lightyellow; padding:12px; margin:5px; width:200px;">Yellow Box 2</div>
+
+  <br>
+  <button onclick="showFark()">Fark Dekho</button>
 
 
   <script>
 
     // ------------------------------------------
-    // PART 1 — querySelector
+    // PART 1 — getElementsByClassName
     // ------------------------------------------
 
-    function selectByClass() {
+    function selectFruits() {
 
-      // .box likhne se CLASS select hoti hai
-      // Yeh sirf PEHLA .box element return karega
-      let firstBox = document.querySelector('.box')
+      // Note: 'fruit' likhte hain — dot (.) nahi lagate, unlike querySelector
+      let fruits = document.getElementsByClassName('fruit')
 
-      firstBox.style.background = 'orange'
-      firstBox.innerHTML = 'Mujhe querySelector ne pakda! (pehla)'
-
-      document.getElementById('output').innerHTML =
-        "let firstBox = document.querySelector('.box') <br>" +
-        "// Sirf pehla .box mila — baaki nahi"
-    }
-
-    function selectById() {
-
-      // #specialBox likhne se ID select hoti hai
-      let special = document.querySelector('#specialBox')
-
-      special.style.background = 'violet'
-      special.innerHTML = 'ID se pakda gaya! ✅'
-
-      document.getElementById('output').innerHTML =
-        "let special = document.querySelector('#specialBox') <br>" +
-        "// # matlab ID, . matlab Class"
-    }
-
-
-    // ------------------------------------------
-    // PART 2 — querySelectorAll
-    // ------------------------------------------
-
-    function selectAllBoxes() {
-
-      // querySelectorAll saare .box elements ek NodeList mein deta hai
-      let allBoxes = document.querySelectorAll('.box')
-
-      // NodeList pe forEach chalate hain — ek ek element milta hai
-      allBoxes.forEach(function(box, index) {
-        box.style.background = 'salmon'
-        box.innerHTML = 'Box number: ' + index
+      // HTMLCollection pe forEach seedha nahi chalta
+      // Array.from() se array banao pehle
+      Array.from(fruits).forEach(function(el) {
+        el.style.background = 'orange'
+        el.style.fontWeight = 'bold'
       })
 
       document.getElementById('output').innerHTML =
-        "let allBoxes = document.querySelectorAll('.box') <br>" +
-        "allBoxes.forEach(function(box, index) { <br>" +
-        "&nbsp;&nbsp;box.style.background = 'salmon' <br>" +
-        "}) <br>" +
-        "// Total boxes mile: " + allBoxes.length
+        "let fruits = document.getElementsByClassName('fruit') <br>" +
+        "// Dot (.) nahi lagate yahan! <br>" +
+        "// Total mile: " + fruits.length + " <br>" +
+        "// Returns: HTMLCollection — Array.from() se convert karo"
+    }
+
+    function selectVeggies() {
+
+      let veggies = document.getElementsByClassName('veggie')
+
+      Array.from(veggies).forEach(function(el) {
+        el.style.background = 'limegreen'
+        el.style.fontWeight = 'bold'
+      })
+
+      document.getElementById('output').innerHTML =
+        "let veggies = document.getElementsByClassName('veggie') <br>" +
+        "// Total mile: " + veggies.length
+    }
+
+    function resetPart1() {
+
+      Array.from(document.getElementsByClassName('fruit')).forEach(function(el) {
+        el.style.background = 'lightblue'
+        el.style.fontWeight = 'normal'
+      })
+
+      Array.from(document.getElementsByClassName('veggie')).forEach(function(el) {
+        el.style.background = 'lightgreen'
+        el.style.fontWeight = 'normal'
+      })
+
+      document.getElementById('output').innerHTML = '// Reset!'
     }
 
 
     // ------------------------------------------
-    // Reset function
+    // PART 2 — getElementsByTagName
     // ------------------------------------------
 
-    function resetAll() {
+    function selectAllP() {
 
-      // Saare .box reset
-      let allBoxes = document.querySelectorAll('.box')
-      allBoxes.forEach(function(box, i) {
-        box.style.background = 'lightblue'
-        box.innerHTML = 'Box ' + (i + 1) + ' — class="box"'
+      // 'p' tag se saare paragraph elements milenge
+      let paragraphs = document.getElementsByTagName('p')
+
+      Array.from(paragraphs).forEach(function(el, index) {
+        el.style.background = 'lightyellow'
+        el.style.padding = '8px'
+        el.innerHTML = 'Paragraph ' + (index + 1) + ' — tag se pakda gaya! ✅'
       })
 
-      // Special box reset
-      let special = document.querySelector('#specialBox')
-      special.style.background = 'lightgreen'
-      special.innerHTML = 'Special Box — id="specialBox"'
+      document.getElementById('output').innerHTML =
+        "let paragraphs = document.getElementsByTagName('p') <br>" +
+        "// Sirf tag name do — 'p', 'div', 'h2' etc <br>" +
+        "// Total mile: " + paragraphs.length
+    }
 
-      document.getElementById('output').innerHTML = '// Reset ho gaya!'
+    function selectAllDiv() {
+
+      let divs = document.getElementsByTagName('div')
+
+      document.getElementById('output').innerHTML =
+        "let divs = document.getElementsByTagName('div') <br>" +
+        "// Page pe total divs hain: " + divs.length + " <br>" +
+        "// (output box bhi ek div hai isliye count zyada hai!)"
+    }
+
+    function resetPart2() {
+      let paragraphs = document.getElementsByTagName('p')
+      let texts = ['Yeh pehla paragraph hai.', 'Yeh doosra paragraph hai.', 'Yeh teesra paragraph hai.']
+      Array.from(paragraphs).forEach(function(el, i) {
+        el.style.background = ''
+        el.style.padding = ''
+        el.innerHTML = texts[i]
+      })
+      document.getElementById('output').innerHTML = '// Reset!'
+    }
+
+
+    // ------------------------------------------
+    // PART 3 — Fark
+    // ------------------------------------------
+
+    function showFark() {
+
+      // querySelector — dot (.) lagate hain, pehla element
+      let first = document.querySelector('.box')
+      first.style.background = 'salmon'
+      first.innerHTML = 'querySelector — sirf pehla!'
+
+      // getElementsByClassName — dot nahi, saare elements
+      let allBoxes = document.getElementsByClassName('box')
+      // allBoxes[1] matlab doosra element (index 0 se start)
+      allBoxes[1].style.background = 'violet'
+      allBoxes[1].innerHTML = 'getElementsByClassName — index se pakda!'
+
+      document.getElementById('output').innerHTML =
+        "querySelector('.box')  → dot lagate hain, PEHLA element <br>" +
+        "getElementsByClassName('box') → dot nahi, returns HTMLCollection <br><br>" +
+        "Dono kaam karte hain — querySelector zyada use hota hai aajkal"
     }
 
   </script>

@@ -122,24 +122,15 @@
       // ---------------------------------------
 
       function selectAllBoxes() {
-        // querySelectAll give us nodelist of all .box
-        let allBoxes = document.querySelector(".box");
+        // querySelectorAll gives us NodeList of all .box elements
+        let allBoxes = document.querySelectorAll(".box");
 
-        // for nodelist we can loop through -- it give us one one element
-        allBoxes.array.forEach(function (box, index) {
+        // Use forEach directly on the NodeList (no .array needed)
+        allBoxes.forEach(function (box, index) {
           box.style.background = "pink";
           box.innerHTML = "Box number: " + (index + 1);
         });
       }
-
-      document.getElementById("output").innerHTML =
-        `let allBoxes = document.querySelector(".box");
-
-        // for nodelist we can loop through -- it give us one one element
-        allBoxes.array.forEach(function (box, index) {
-          box.style.background = "salmon";
-          box.innerHTML = "Box number: " + index;
-        });`;
 
       // ------------------------------------------
       // Reset function
