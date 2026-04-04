@@ -1,100 +1,118 @@
-<!DOCTYPE html>
+ <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Lesson 1 - getElementById</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 30px;
-      background: #f5f5f5;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lesson 1 - getElementById</title>
+    <style>
+      body {
+        font-family: monospace;
+        padding: 30px;
+        background: #f5f5f5;
+      }
 
-    h1 { color: #333; }
+      h1 {
+        color: #333;
+      }
 
-    #myBox {
-      background: lightblue;
-      padding: 20px;
-      width: 300px;
-      font-size: 20px;
-      margin-bottom: 20px;
-    }
+      #myBox {
+        background: lightblue;
+        padding: 20px;
+        width: 300px;
+        font-size: 20px;
+        margin-bottom: 20px;
+      }
 
-    button {
-      padding: 10px 20px;
-      margin: 5px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-  </style>
-</head>
-<body>
+      button {
+        padding: 10px 20px;
+        margin: 5px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Lesson 1 — getElementById</h1>
 
-  <h1>Lesson 1 — getElementById</h1>
+    <!-- This is the box that we will select using JavaScript -->
+    <div id="myBox">I am a box 📦</div>
 
-  <!-- Yeh box hai jise hum JS se pakdenge -->
-  <div id="myBox">
-    Main ek box hoon 📦
-  </div>
+    <button onclick="changeText()">Change Text</button>
+    <button onclick="changeColor()">Change Color</button>
+    <button onclick="resetBox()">Reset</button>
 
-  <button onclick="textBadlo()">Text Badlo</button>
-  <button onclick="colorBadlo()">Color Badlo</button>
-  <button onclick="reset()">Reset</button>
+    <hr />
 
-  <hr>
+    <!-- Console-like output will be shown here -->
+    <h3>Console Output:</h3>
+    <div
+      id="output"
+      style="
+        background: black;
+        color: lime;
+        padding: 15px;
+        font-family: monospace;
+        font-size: 15px;
+      "
+    >
+      // Nothing has happened yet...
+    </div>
 
-  <!-- Yahan console jaisa output dikhayenge -->
-  <h3>Console Output:</h3>
-  <div id="output" style="background:black; color:lime; padding:15px; font-family:monospace; font-size:15px;">
-    // Abhi kuch nahi hua...
-  </div>
+    <script>
+      // Step 1 - Select the element using getElementById
+      // document.getElementById('id-name') --> returns that element
 
-  <script>
+      function changeText() {
+        // Select the box
+        let box = document.getElementById("myBox");
 
-    // STEP 1 — getElementById se element pakdo
-    // document.getElementById('id-name') → woh element return karta hai
+        // Change the text
+        box.innerHTML = "The text has been changed!";
 
-    function textBadlo() {
+        // Show it in the output
+        let output = document.getElementById("output");
+        output.innerHTML = `// selected the box
+        <br>
+        let box = document.getElementById('myBox')
+        <br><br>
+        // changed the text
+        <br>
+        box.innerHTML = 'The text has been changed!'
+        `;
+      }
 
-      // Box pakda
-      let box = document.getElementById('myBox');
+      function changeColor() {
+        // Select the box
+        let box = document.getElementById("myBox");
 
-      // Text badla
-      box.innerHTML = 'Text badal gaya! ✅';
+        // Change the background color
+        box.style.background = "green";
+        box.innerHTML = "The color has been changed!";
 
-      // Output mein dikhao
-      let output = document.getElementById('output');
-      output.innerHTML = `
-        let box = document.getElementById('myBox'); <br>
-        box.innerHTML = 'Text badal gaya!';
-      `;
-    }
+        // Show it in the output
+        let output = document.getElementById("output");
+        output.innerHTML = `// selected the box
+        <br>
+        let box = document.getElementById('myBox')
+        <br><br>
+        // changed the background color
+        <br>
+        box.style.background = 'green'
+        `;
+      }
 
-    function colorBadlo() {
+      function resetBox() {
+        // Select the box
+        let box = document.getElementById("myBox");
 
-      let box = document.getElementById('myBox');
+        // Reset everything
+        box.innerHTML = "I am a box 📦";
+        box.style.background = "lightblue";
 
-      // Style.background se background color badlo
-      box.style.background = 'salmon';
-
-      let output = document.getElementById('output');
-      output.innerHTML = `
-        let box = document.getElementById('myBox'); <br>
-        box.style.background = 'salmon';
-      `;
-    }
-
-    function reset() {
-
-      let box = document.getElementById('myBox');
-      box.innerHTML = 'Main ek box hoon 📦';
-      box.style.background = 'lightblue';
-
-      let output = document.getElementById('output');
-      output.innerHTML = '// Reset ho gaya!';
-    }
-
-  </script>
-
-</body>
+        // Update the output
+        let output = document.getElementById("output");
+        output.innerHTML = "// Everything has been reset!";
+      }
+    </script>
+  </body>
 </html>

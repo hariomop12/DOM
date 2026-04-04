@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lesson 2 - querySelector</title>
+    <style>
+      body {
+        font-family: monospace;
+        padding: 30px;
+        background: #f5f5f5;
+      }
+
+      h2 {
+        margin-top: 40px;
+        color: #333;
+      }
+
+      .box {
+        background: lightcoral;
+        padding: 15px;
+        margin: 15px;
+        width: 200px;
+      }
+
+      #specialBox {
+        background: lightcoral;
+        padding: 15px;
+        margin: 15px;
+        width: 200px;
+      }
+
+      button {
+        padding: 10px 20px;
+        margin: 5px;
+        font-size: 15px;
+        cursor: pointer;
+      }
+
+      #output {
+        background: black;
+        color: lime;
+        padding: 15px;
+        font-family: monospace;
+        font-size: 15px;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Lesson 2 - querySelector & querySelectorAll</h1>
+
+    <!-- ============================================== 
+    PART 1 - querySelector 
+    what it did: find first match in css slector
+    syntax: document.queryselector('selector')
+    ================================================= -->
+
+    <h2>Part 1 - querySelector (select first element)</h2>
+
+    <div class="box">Box 1 - class="box"</div>
+    <div class="box">Box 2 - class="box"</div>
+    <div class="box">Box 3 - class="box"</div>
+    <div id="specialBox">Special Box - id="specialBox"</div>
+
+    <br />
+
+    <button onclick="selectByClass()">querySelector .box</button>
+    <button onclick="selectById()">querySelector #specialBox</button>
+
+    <div id="output">// output will be here...</div>
+
+    <!-- ===============================
+    Part 2 - querySelectorAll
+    what it did: find all match from css selector
+    return: NodeList (kind of array)
+   ====================================-->
+
+    <h2>Part 2 - querySelectorAll (all elements)</h2>
+    <button onclick="selectAllBoxes()">querySelectorAll .box</button>
+    <button onclick="resetAll()">Reset All</button>
+
+    <script>
+      // ------------------------------------------------
+      // PART 1 - querySelector
+      // -------------------------------------------------
+
+      function selectByClass() {
+        // if we write .box then it select class
+        // querySelector return only first element
+
+        let firstBox = document.querySelector(".box");
+        firstBox.style.background = "orange";
+
+        document.getElementById("output").innerHTML =
+          ` let firstBox = document.querySelector(".box");
+        <br>
+        firstBox.style.background = "orange";
+        `;
+      }
+
+      function selectById() {
+        // using # we can select id like #specialBox
+        let special = document.querySelector("#specialBox");
+
+        special.style.background = "violet";
+        special.innerHTML = "seleted by ID ";
+
+        document.getElementById("output").innerHTML = `
+         let special = document.querySelector("#specialBox");
+<br>
+        special.style.background = 'violet'
+        <br>
+        special.innerHTML = 'seleted by ID '
+        <br>
+        // # means id & . means class 
+        `;
+      }
+
+      // ---------------------------------------
+      // PART 2 - querySelectorAll
+      // ---------------------------------------
+
+      function selectAllBoxes() {
+        // querySelectAll give us nodelist of all .box
+        let allBoxes = document.querySelector(".box");
+
+        // for nodelist we can loop through -- it give us one one element
+        allBoxes.array.forEach(function (box, index) {
+          box.style.background = "pink";
+          box.innerHTML = "Box number: " + (index + 1);
+        });
+      }
+
+      document.getElementById("output").innerHTML =
+        `let allBoxes = document.querySelector(".box");
+
+        // for nodelist we can loop through -- it give us one one element
+        allBoxes.array.forEach(function (box, index) {
+          box.style.background = "salmon";
+          box.innerHTML = "Box number: " + index;
+        });`;
+
+      // ------------------------------------------
+      // Reset function
+      // ------------------------------------------
+
+      function resetAll() {
+        // all .box reset
+        let allBoxes = document.querySelectorAll(".box");
+        allBoxes.forEach(function (box, i) {
+          box.style.background = "lightblue";
+          box.innerHTML = "Box " + (i + 1) + ' - class="box"';
+        });
+
+        // Special box reset
+        let special = document.querySelector("#specialBox");
+        special.style.background = "lightgreen";
+        special.innerHTML = 'Special Box - id="specialBox"';
+
+        document.getElementById("output").innerHTML = "// Reset Done";
+      }
+    </script>
+  </body>
+</html>
