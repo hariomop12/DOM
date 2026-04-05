@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lesson 7 - style.*</title>
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 30px;
+        background: #f5f5f5;
+      }
+
+      h1 {
+        color: #222;
+      }
+
+      h2 {
+        margin-top: 40px;
+        color: #333;
+      }
+
+      button {
+        padding: 10px 20px;
+        margin: 5px;
+        font-size: 15px;
+        cursor: pointer;
+      }
+
+      .box {
+        background: lightblue;
+        padding: 20px;
+        margin: 10px 0;
+        width: 250px;
+        font-size: 16px;
+      }
+
+      .console {
+        background: black;
+        color: lime;
+        padding: 15px;
+        font-family: monospace;
+        font-size: 14px;
+        margin-top: 10px;
+        min-height: 60px;
+        white-space: pre-wrap;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Lesson 7 - style.* Inline Styling</h1>
+
+    <p>You can change CSS directly with JavaScript!</p>
+
+    <!-- =========================================
+         PART 1 - Basic style properties
+         In JavaScript, CSS properties use camelCase
+
+         CSS: background-color  -> JS: backgroundColor
+         CSS: font-size         -> JS: fontSize
+         CSS: border-radius     -> JS: borderRadius
+    ========================================== -->
+
+    <h2>Part 1 - camelCase Rule</h2>
+
+    <p>In CSS we use "-" but in JavaScript we use camelCase.</p>
+
+    <div class="box" id="box1">I am a box</div>
+
+    <button onclick="changeBackground()">Change Background</button>
+    <button onclick="changeFont()">Change Font Size</button>
+    <button onclick="changeBorder()">Change Border Radius</button>
+    <button onclick="resetPart1()">Reset</button>
+
+    <div id="output1" class="console">// Click a button</div>
+
+    <!-- =========================================
+         PART 2 - Change many styles together
+         We can use style.property one by one
+         or use cssText to write all CSS at once
+    ========================================== -->
+
+    <h2>Part 2 - Multiple Properties at Once</h2>
+
+    <div class="box" id="box2">Change all my styles</div>
+
+    <button onclick="changeOneByOne()">Use style.*</button>
+    <button onclick="changeWithCssText()">Use cssText</button>
+    <button onclick="resetPart2()">Reset</button>
+
+    <div id="output2" class="console">// Click a button</div>
+
+    <!-- =========================================
+         PART 3 - Read styles
+         style.* only reads inline styles
+         getComputedStyle() reads the final style
+         from CSS + inline styles
+    ========================================== -->
+
+    <h2>Part 3 - Read Style Values</h2>
+
+    <div class="box" id="box3">My styles come from CSS</div>
+
+    <button onclick="readInlineStyle()">Read style.*</button>
+    <button onclick="readComputedStyle()">Read getComputedStyle()</button>
+    <button onclick="setAndRead()">Set Then Read</button>
+    <button onclick="resetPart3()">Reset</button>
+
+    <div id="output3" class="console">// Click a button</div>
+
+    <!-- =========================================
+         PART 4 - Remove style
+         Setting a style to "" removes the inline style
+    ========================================== -->
+
+    <h2>Part 4 - Remove Style</h2>
+
+    <div class="box" id="box4">I have styles that can be removed</div>
+
+    <button onclick="setStyle()">Set Style</button>
+    <button onclick="removeStyle()">Remove Style</button>
+
+    <div id="output4" class="console">// Click a button</div>
+
+    <script>
+      // =========================================
+      // PART 1 - camelCase Rule
+      // =========================================
+
+      function changeBackground() {
+        const box = document.getElementById("box1");
+
+        // CSS: background-color
+        // JS: backgroundColor
+        box.style.backgroundColor = "salmon";
+
+        document.getElementById("output1").textContent =
+          "box.style.backgroundColor = 'salmon'\n\n" +
+          "CSS property: background-color\n" +
+          "JavaScript property: backgroundColor";
+      }
+
+      function changeFont() {
+        const box = document.getElementById("box1");
+
+        // CSS: font-size -> JS: fontSize
+        box.style.fontSize = "24px";
+
+        // CSS: font-weight -> JS: fontWeight
+        box.style.fontWeight = "bold";
+
+        document.getElementById("output1").textContent =
+          "box.style.fontSize = '24px'\n" +
+          "box.style.fontWeight = 'bold'\n\n" +
+          "font-size -> fontSize\n" +
+          "font-weight -> fontWeight";
+      }
+
+      function changeBorder() {
+        const box = document.getElementById("box1");
+
+        // CSS: border-radius -> JS: borderRadius
+        box.style.borderRadius = "20px";
+        box.style.border = "3px solid navy";
+
+        document.getElementById("output1").textContent =
+          "box.style.borderRadius = '20px'\n" +
+          "box.style.border = '3px solid navy'\n\n" +
+          "border-radius -> borderRadius";
+      }
+
+      function resetPart1() {
+        const box = document.getElementById("box1");
+
+        // Remove all inline styles
+        box.style.cssText = "";
+
+        document.getElementById("output1").textContent =
+          "// All styles removed";
+      }
+
+      // =========================================
+      // PART 2 - Change many styles together
+      // =========================================
+
+      function changeOneByOne() {
+        const box = document.getElementById("box2");
+
+        // Change each style one by one
+        box.style.backgroundColor = "purple";
+        box.style.color = "white";
+        box.style.fontSize = "20px";
+        box.style.padding = "30px";
+        box.style.borderRadius = "10px";
+
+        document.getElementById("output2").textContent =
+          "box.style.backgroundColor = 'purple'\n" +
+          "box.style.color = 'white'\n" +
+          "box.style.fontSize = '20px'\n" +
+          "box.style.padding = '30px'\n" +
+          "box.style.borderRadius = '10px'\n\n" +
+          "This works, but it is longer.";
+      }
+
+      function changeWithCssText() {
+        const box = document.getElementById("box2");
+
+        // cssText lets us write normal CSS in one line
+        box.style.cssText =
+          "background-color: orange; color: white; font-size: 20px; padding: 30px; border-radius: 10px;";
+
+        document.getElementById("output2").textContent =
+          "box.style.cssText =\n" +
+          "'background-color: orange; color: white; font-size: 20px; padding: 30px; border-radius: 10px;'\n\n" +
+          "Inside cssText, use normal CSS names with '-'.";
+      }
+
+      function resetPart2() {
+        document.getElementById("box2").style.cssText = "";
+
+        document.getElementById("output2").textContent =
+          "// All styles removed";
+      }
+
+      // =========================================
+      // PART 3 - Read styles
+      // =========================================
+
+      function readInlineStyle() {
+        const box = document.getElementById("box3");
+
+        // style.* only reads inline styles
+        const background = box.style.backgroundColor;
+
+        document.getElementById("output3").textContent =
+          "box.style.backgroundColor = '" + background + "'\n\n" +
+          "It is empty because the background comes from CSS,\n" +
+          "not from an inline style.";
+      }
+
+      function readComputedStyle() {
+        const box = document.getElementById("box3");
+
+        // getComputedStyle() gives the final style
+        const computed = window.getComputedStyle(box);
+
+        const background = computed.backgroundColor;
+        const padding = computed.padding;
+
+        document.getElementById("output3").textContent =
+          "window.getComputedStyle(box).backgroundColor\n" +
+          "= '" + background + "'\n\n" +
+          "window.getComputedStyle(box).padding\n" +
+          "= '" + padding + "'\n\n" +
+          "getComputedStyle() can read styles from CSS and inline styles.";
+      }
+
+      function setAndRead() {
+        const box = document.getElementById("box3");
+
+        // First add an inline style
+        box.style.backgroundColor = "limegreen";
+
+        // Now style.* can read it
+        const background = box.style.backgroundColor;
+
+        document.getElementById("output3").textContent =
+          "box.style.backgroundColor = 'limegreen'\n\n" +
+          "After setting it, style.* can read it:\n" +
+          "box.style.backgroundColor = '" + background + "'";
+      }
+
+      function resetPart3() {
+        document.getElementById("box3").style.cssText = "";
+
+        document.getElementById("output3").textContent =
+          "// All styles removed";
+      }
+
+      // =========================================
+      // PART 4 - Remove style
+      // =========================================
+
+      function setStyle() {
+        const box = document.getElementById("box4");
+
+        box.style.backgroundColor = "red";
+        box.style.color = "white";
+        box.style.fontSize = "22px";
+
+        document.getElementById("output4").textContent =
+          "box.style.backgroundColor = 'red'\n" +
+          "box.style.color = 'white'\n" +
+          "box.style.fontSize = '22px'\n\n" +
+          "Inline styles have been added.";
+      }
+
+      function removeStyle() {
+        const box = document.getElementById("box4");
+
+        // Setting "" removes the inline style
+        box.style.backgroundColor = "";
+        box.style.color = "";
+        box.style.fontSize = "";
+
+        document.getElementById("output4").textContent =
+          "box.style.backgroundColor = ''\n" +
+          "box.style.color = ''\n" +
+          "box.style.fontSize = ''\n\n" +
+          "An empty string removes the inline style.\n" +
+          "The original CSS class style comes back.";
+      }
+    </script>
+  </body>
+</html>

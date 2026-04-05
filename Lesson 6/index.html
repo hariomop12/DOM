@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lesson 6 - innerHTML vs textContent vs innerText</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+      background: #f5f5f5;
+    }
+
+    h2 { margin-top: 40px; color: #333; }
+
+    button {
+      padding: 10px 20px;
+      margin: 5px;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .box {
+      background: white;
+      border: 2px solid #ccc;
+      padding: 15px;
+      margin: 10px 0;
+      min-height: 50px;
+      font-size: 16px;
+    }
+
+    #output {
+      background: black;
+      color: lime;
+      padding: 15px;
+      font-family: monospace;
+      font-size: 14px;
+      margin-top: 10px;
+      min-height: 50px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Lesson 6 — innerHTML vs textContent vs innerText</h1>
+  <p>Teeno content set karne ke liye hain — lekin teeno alag alag kaam karte hain!</p>
+
+
+  <!-- ============================================
+    PART 1 — SET karna (likhna)
+    Teeno se content SET karo aur fark dekho
+  ============================================= -->
+
+  <h2>Part 1 — SET karna (likhna)</h2>
+  <p>Hum yeh string set karenge: <code>'Hello &lt;b&gt;Bhai&lt;/b&gt;!'</code></p>
+
+  <div class="box" id="box1">Yahan content aayega...</div>
+
+  <button onclick="setInnerHTML()">innerHTML se set karo</button>
+  <button onclick="setTextContent()">textContent se set karo</button>
+  <button onclick="setInnerText()">innerText se set karo</button>
+  <button onclick="resetPart1()">Reset</button>
+
+  <div id="output">// Button dabao...</div>
+
+
+  <!-- ============================================
+    PART 2 — GET karna (padhna)
+    Ek hi box se teeno alag alag kya return karte hain
+  ============================================= -->
+
+  <h2>Part 2 — GET karna (padhna)</h2>
+  <p>Yeh box ke andar HTML bhi hai aur text bhi:</p>
+
+  <!-- Is box mein HTML tags hain -->
+  <div class="box" id="box2">
+    Hello <b>Bhai</b>! Kya <i>haal</i> hai?
+    <span style="display:none">Main hidden hoon!</span>
+  </div>
+
+  <button onclick="getInnerHTML()">innerHTML padho</button>
+  <button onclick="getTextContent()">textContent padho</button>
+  <button onclick="getInnerText()">innerText padho</button>
+
+  <div id="output2" style="background:black; color:lime; padding:15px; font-family:monospace; font-size:14px; margin-top:10px; min-height:50px; white-space:pre-wrap;">
+    // Button dabao...
+  </div>
+
+
+  <!-- ============================================
+    PART 3 — Real world use
+    Kab kya use karna chahiye
+  ============================================= -->
+
+  <h2>Part 3 — Real use kab kya?</h2>
+
+  <div class="box" id="box3">Main ek box hoon</div>
+
+  <button onclick="realHTML()">HTML insert karo (innerHTML)</button>
+  <button onclick="realSafe()">Safe text (textContent)</button>
+  <button onclick="realHidden()">Hidden text ka fark (innerText vs textContent)</button>
+  <button onclick="resetPart3()">Reset</button>
+
+  <div id="output3" style="background:black; color:lime; padding:15px; font-family:monospace; font-size:14px; margin-top:10px; min-height:50px; white-space:pre-wrap;">
+    // Button dabao...
+  </div>
+
+
+  <script>
+
+    // ------------------------------------------
+    // PART 1 — SET karna
+    // ------------------------------------------
+
+    let htmlString = 'Hello <b>Bhai</b>!'
+
+    function setInnerHTML() {
+      let box = document.getElementById('box1')
+
+      // innerHTML — HTML tags ko render karta hai
+      // <b> tag render hoga — BOLD dikhega
+      box.innerHTML = htmlString
+
+      document.getElementById('output').innerHTML =
+        "box.innerHTML = 'Hello <b>Bhai</b>!' \n" +
+        "// HTML render hota hai — 'Bhai' BOLD dikhega \n" +
+        "// Use karo jab HTML bhi insert karna ho"
+    }
+
+    function setTextContent() {
+      let box = document.getElementById('box1')
+
+      // textContent — HTML tags ko render NAHI karta
+      // <b> tag literally text ki tarah dikhega
+      box.textContent = htmlString
+
+      document.getElementById('output').innerHTML =
+        "box.textContent = 'Hello <b>Bhai</b>!' \n" +
+        "// HTML render NAHI hota — tag literally dikhega \n" +
+        "// Use karo jab sirf plain text insert karna ho (safe!)"
+    }
+
+    function setInnerText() {
+      let box = document.getElementById('box1')
+
+      // innerText — textContent jaisa hi, HTML render nahi karta
+      // Fark: innerText CSS ko consider karta hai
+      box.innerText = htmlString
+
+      document.getElementById('output').innerHTML =
+        "box.innerText = 'Hello <b>Bhai</b>!' \n" +
+        "// textContent jaisa hi — HTML render nahi hota \n" +
+        "// Fark: innerText CSS visibility consider karta hai"
+    }
+
+    function resetPart1() {
+      document.getElementById('box1').innerHTML = 'Yahan content aayega...'
+      document.getElementById('output').innerHTML = '// Reset!'
+    }
+
+
+    // ------------------------------------------
+    // PART 2 — GET karna
+    // ------------------------------------------
+
+    function getInnerHTML() {
+      let box = document.getElementById('box2')
+
+      // innerHTML — pura HTML source milta hai, tags ke saath
+      let result = box.innerHTML
+
+      document.getElementById('output2').innerHTML =
+        "box.innerHTML result:\n" +
+        "'" + result.trim() + "'\n\n" +
+        "// HTML tags ke saath milta hai \n" +
+        "// Hidden elements bhi milte hain"
+    }
+
+    function getTextContent() {
+      let box = document.getElementById('box2')
+
+      // textContent — sirf text milta hai, tags nahi
+      // Hidden elements ka text bhi milta hai!
+      let result = box.textContent
+
+      document.getElementById('output2').innerHTML =
+        "box.textContent result:\n" +
+        "'" + result.trim() + "'\n\n" +
+        "// Tags nahi milte — sirf text \n" +
+        "// Hidden element ka text BHI milta hai!"
+    }
+
+    function getInnerText() {
+      let box = document.getElementById('box2')
+
+      // innerText — jo screen pe DIKHTA hai sirf woh milta hai
+      // Hidden elements ka text NAHI milta
+      let result = box.innerText
+
+      document.getElementById('output2').innerHTML =
+        "box.innerText result:\n" +
+        "'" + result.trim() + "'\n\n" +
+        "// Tags nahi milte \n" +
+        "// Hidden element ka text BHI nahi milta! \n" +
+        "// Jo screen pe dikhta hai — wahi milta hai"
+    }
+
+
+    // ------------------------------------------
+    // PART 3 — Real use
+    // ------------------------------------------
+
+    function realHTML() {
+      let box = document.getElementById('box3')
+
+      // Real use — HTML insert karna ho toh innerHTML
+      box.innerHTML = `
+        <h3 style="color:blue; margin:0">Heading bana!</h3>
+        <p style="color:green; margin:5px 0">Paragraph bhi bana!</p>
+        <button style="padding:5px 10px">Button bhi! 🎉</button>
+      `
+
+      document.getElementById('output3').innerHTML =
+        "box.innerHTML = '<h3>...</h3><p>...</p>' \n" +
+        "// Puri HTML structure insert ho gayi! \n" +
+        "// Yahi innerHTML ki power hai"
+    }
+
+    function realSafe() {
+      let box = document.getElementById('box3')
+
+      // Real use — user ka input show karna ho toh textContent
+      // Agar user ne <script> likha toh execute nahi hoga
+      let userInput = '<script>alert("hacked!")<\/script> Normal text'
+      box.textContent = userInput
+
+      document.getElementById('output3').innerHTML =
+        "// User input show karna ho toh textContent use karo \n" +
+        "box.textContent = userInput \n" +
+        "// <script> tag execute nahi hoga — safe! \n" +
+        "// innerHTML se karte toh XSS attack ho sakta tha"
+    }
+
+    function realHidden() {
+      let box = document.getElementById('box3')
+      box.innerHTML = 'Visible text <span style="display:none">Hidden text</span>'
+
+      document.getElementById('output3').innerHTML =
+        "box mein hai: 'Visible text' + hidden span \n\n" +
+        "box.textContent = '" + box.textContent + "' \n" +
+        "// textContent ne hidden text bhi pakda! \n\n" +
+        "box.innerText = '" + box.innerText + "' \n" +
+        "// innerText ne hidden text nahi pakda!"
+    }
+
+    function resetPart3() {
+      document.getElementById('box3').innerHTML = 'Main ek box hoon'
+      document.getElementById('output3').innerHTML = '// Reset!'
+    }
+
+  </script>
+
+</body>
+</html>
