@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lesson 5 - createElement & createTextNode</title>
+
+    <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        padding: 30px;
+        background: #f5f5f5;
+      }
+
+      h1 {
+        color: #222;
+      }
+
+      h2 {
+        margin-top: 40px;
+        color: #333;
+      }
+
+      button {
+        padding: 10px 20px;
+        margin: 5px;
+        font-size: 15px;
+        cursor: pointer;
+      }
+
+      #output,
+      #output2,
+      #output3 {
+        background: black;
+        color: lime;
+        padding: 15px;
+        font-family: monospace;
+        font-size: 15px;
+        margin-top: 10px;
+        min-height: 50px;
+      }
+
+      .drop-zone {
+        background: white;
+        border: 2px dashed #999;
+        padding: 20px;
+        margin-top: 10px;
+        min-height: 60px;
+      }
+
+      .new-div {
+        background: lightblue;
+        padding: 12px;
+        margin: 8px 0;
+        width: 250px;
+      }
+
+      .new-p {
+        background: lightgreen;
+        padding: 12px;
+        margin: 8px 0;
+        width: 250px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Lesson 5 - createElement & createTextNode</h1>
+    <p>Now we will create new elements by ourselves and add them on the page.</p>
+
+    <!-- ======================================================
+      PART 1 - createElement
+
+      document.createElement("tagName")
+      It only creates the element in memory.
+      It will not show on page until we use appendChild().
+    ======================================================= -->
+
+    <h2>Part 1 - createElement</h2>
+
+    <button onclick="makeDiv()">Make New Div</button>
+    <button onclick="makeP()">Make New Paragraph</button>
+    <button onclick="resetPart1()">Reset</button>
+
+    <div id="output">// Click a button...</div>
+
+    <div class="drop-zone" id="zone1">
+      New elements will appear here
+    </div>
+
+    <!-- ======================================================
+      PART 2 - createTextNode
+
+      createTextNode() makes only text.
+      HTML tags inside it do not work.
+    ======================================================= -->
+
+    <h2>Part 2 - createTextNode</h2>
+
+    <button onclick="useTextNode()">Use createTextNode</button>
+    <button onclick="useInnerHTML()">Use innerHTML</button>
+    <button onclick="resetPart2()">Reset</button>
+
+    <div class="drop-zone" id="zone2">
+      Result will appear here
+    </div>
+
+    <div id="output2">// Code will appear here</div>
+
+    <!-- ======================================================
+      PART 3 - Step by Step
+
+      Step 1 - Create element
+      Step 2 - Add content
+      Step 3 - Add style
+      Step 4 - Add to page
+    ======================================================= -->
+
+    <h2>Part 3 - Understand Step by Step</h2>
+
+    <button onclick="step1()">Step 1 - Create Element</button>
+    <button onclick="step2()">Step 2 - Add Content</button>
+    <button onclick="step3()">Step 3 - Add Style</button>
+    <button onclick="step4()">Step 4 - Add To Page</button>
+    <button onclick="resetPart3()">Reset</button>
+
+    <div class="drop-zone" id="zone3">
+      After step 4, the element will appear here
+    </div>
+
+    <div id="output3">// Start with Step 1</div>
+
+    <script>
+      // This variable will store our element for Part 3
+      let myElement = null;
+
+      // ======================================================
+      // PART 1
+      // ======================================================
+
+      function makeDiv() {
+        // Create a new div
+        let newDiv = document.createElement("div");
+
+        // Add text inside the div
+        newDiv.innerHTML = "I am a new div!";
+
+        // Add class for style
+        newDiv.className = "new-div";
+
+        // Add div inside zone1
+        document.getElementById("zone1").appendChild(newDiv);
+
+        // Show code on screen
+        document.getElementById("output").innerHTML = `
+          let newDiv = document.createElement("div") <br>
+          newDiv.innerHTML = "I am a new div!" <br>
+          newDiv.className = "new-div" <br>
+          zone.appendChild(newDiv)
+        `;
+      }
+
+      function makeP() {
+        // Create a new paragraph
+        let newP = document.createElement("p");
+
+        // Add text
+        newP.innerHTML = "I am a new paragraph!";
+
+        // Add class
+        newP.className = "new-p";
+
+        // Add paragraph to page
+        document.getElementById("zone1").appendChild(newP);
+
+        // Show code
+        document.getElementById("output").innerHTML = `
+          let newP = document.createElement("p") <br>
+          newP.innerHTML = "I am a new paragraph!" <br>
+          newP.className = "new-p" <br>
+          zone.appendChild(newP)
+        `;
+      }
+
+      function resetPart1() {
+        document.getElementById("zone1").innerHTML =
+          "New elements will appear here";
+
+        document.getElementById("output").innerHTML = "// Reset done";
+      }
+
+      // ======================================================
+      // PART 2
+      // ======================================================
+
+      function useTextNode() {
+        // Create a new div
+        let newDiv = document.createElement("div");
+        newDiv.className = "new-div";
+
+        // Create only text
+        let textNode = document.createTextNode(
+          'This text comes from createTextNode. <b>This will NOT become bold.</b>'
+        );
+
+        // Put text inside the div
+        newDiv.appendChild(textNode);
+
+        // Add div on page
+        document.getElementById("zone2").appendChild(newDiv);
+
+        // Show code
+        document.getElementById("output2").innerHTML = `
+          let textNode = document.createTextNode("...") <br>
+          newDiv.appendChild(textNode) <br><br>
+
+          HTML tags do not work here. <br>
+          So &lt;b&gt; will stay normal text.
+        `;
+      }
+
+      function useInnerHTML() {
+        // Create a new div
+        let newDiv = document.createElement("div");
+        newDiv.className = "new-div";
+
+        // innerHTML understands HTML tags
+        newDiv.innerHTML =
+          'This text comes from innerHTML. <b>This WILL become bold.</b>';
+
+        // Add div on page
+        document.getElementById("zone2").appendChild(newDiv);
+
+        // Show code
+        document.getElementById("output2").innerHTML = `
+          newDiv.innerHTML = "... <b>bold text</b>" <br><br>
+
+          HTML tags work here. <br>
+          So the text becomes bold.
+        `;
+      }
+
+      function resetPart2() {
+        document.getElementById("zone2").innerHTML =
+          "Result will appear here";
+
+        document.getElementById("output2").innerHTML = "// Reset done";
+      }
+
+      // ======================================================
+      // PART 3
+      // ======================================================
+
+      function step1() {
+        // Create a new div and save it in myElement
+        myElement = document.createElement("div");
+
+        document.getElementById("output3").innerHTML = `
+          Step 1 complete <br><br>
+
+          myElement = document.createElement("div") <br><br>
+
+          The element is created in memory. <br>
+          It is not visible on page yet.
+        `;
+      }
+
+      function step2() {
+        // Check if step 1 is done
+        if (myElement === null) {
+          alert("Please do Step 1 first.");
+          return;
+        }
+
+        // Add text inside the element
+        myElement.innerHTML = "Hello! I am the new element.";
+
+        document.getElementById("output3").innerHTML = `
+          Step 2 complete <br><br>
+
+          myElement.innerHTML = "Hello! I am the new element." <br><br>
+
+          Text is added, but it is still not visible on page.
+        `;
+      }
+
+      function step3() {
+        // Check if step 1 is done
+        if (myElement === null) {
+          alert("Please do Step 1 first.");
+          return;
+        }
+
+        // Add some style
+        myElement.style.background = "salmon";
+        myElement.style.padding = "15px";
+        myElement.style.width = "250px";
+        myElement.style.fontWeight = "bold";
+
+        document.getElementById("output3").innerHTML = `
+          Step 3 complete <br><br>
+
+          myElement.style.background = "salmon" <br>
+          myElement.style.padding = "15px" <br>
+          myElement.style.width = "250px" <br><br>
+
+          Style is added, but still not visible on page.
+        `;
+      }
+
+      function step4() {
+        // Check if step 1 is done
+        if (myElement === null) {
+          alert("Please do Step 1 first.");
+          return;
+        }
+
+        // Add the element to the page
+        document.getElementById("zone3").appendChild(myElement);
+
+        document.getElementById("output3").innerHTML = `
+          Step 4 complete <br><br>
+
+          zone.appendChild(myElement) <br><br>
+
+          Now the element is visible on the page.
+        `;
+
+        // Reset variable for next time
+        myElement = null;
+      }
+
+      function resetPart3() {
+        // Remove old element and reset variable
+        myElement = null;
+
+        document.getElementById("zone3").innerHTML =
+          "After step 4, the element will appear here";
+
+        document.getElementById("output3").innerHTML =
+          "// Start again from Step 1";
+      }
+    </script>
+  </body>
+</html>
