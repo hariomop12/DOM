@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lesson 12 - Form Submit and preventDefault</title>
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 30px;
+        background: #f5f5f5;
+      }
+
+      h1,
+      h2 {
+        color: #333;
+      }
+
+      h2 {
+        margin-top: 40px;
+      }
+
+      form {
+        background: white;
+        border: 2px solid #ccc;
+        padding: 20px;
+        margin: 10px 0;
+        max-width: 450px;
+      }
+
+      label {
+        display: block;
+        margin-top: 10px;
+        font-weight: bold;
+      }
+
+      input {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        margin-bottom: 10px;
+        font-size: 15px;
+        box-sizing: border-box;
+      }
+
+      button {
+        padding: 10px 20px;
+        font-size: 15px;
+        cursor: pointer;
+      }
+
+      .box {
+        background: white;
+        border: 2px solid #ccc;
+        padding: 15px;
+        margin-top: 10px;
+        font-size: 15px;
+      }
+
+      .code-box {
+        background: black;
+        color: lime;
+        padding: 15px;
+        margin-top: 10px;
+        font-family: monospace;
+        font-size: 14px;
+        white-space: pre-wrap;
+        min-height: 60px;
+      }
+
+      .error {
+        color: red;
+        font-size: 13px;
+        margin-left: 5px;
+      }
+
+      .success {
+        color: green;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Lesson 12 - Form Submit and preventDefault</h1>
+
+    <p>
+      When a form is submitted, the browser reloads the page by default.
+      <b>preventDefault()</b> stops that page reload.
+    </p>
+
+    <p>
+      In React, this is the same thing you do inside
+      <b>onSubmit</b> with <b>e.preventDefault()</b>.
+    </p>
+
+    <!-- =========================
+         PART 1 - Without preventDefault
+    ========================== -->
+
+    <h2>Part 1 - Form Submit Reloads the Page</h2>
+
+    <form id="form1">
+      <label>Your Name:</label>
+      <input type="text" placeholder="Enter your name" />
+
+      <button type="submit">Submit</button>
+
+      <div class="box" id="result1">
+        Click submit and the page will reload.
+      </div>
+    </form>
+
+    <!-- =========================
+         PART 2 - Using preventDefault
+    ========================== -->
+
+    <h2>Part 2 - Stop Page Reload with preventDefault</h2>
+
+    <form id="form2">
+      <label>Your Name:</label>
+      <input
+        type="text"
+        id="name-input"
+        placeholder="Enter your name"
+      />
+
+      <button type="submit">Submit Without Reload</button>
+    </form>
+
+    <div class="box" id="result2">
+      Submit the form. The page will not reload.
+    </div>
+
+    <div class="code-box" id="output2">
+      Code will appear here...
+    </div>
+
+    <!-- =========================
+         PART 3 - Read Form Values
+    ========================== -->
+
+    <h2>Part 3 - Read Values from the Form</h2>
+
+    <form id="form3">
+      <label>Name:</label>
+      <input type="text" id="f-name" placeholder="Enter your name" />
+
+      <label>Email:</label>
+      <input type="email" id="f-email" placeholder="Enter your email" />
+
+      <label>Age:</label>
+      <input type="number" id="f-age" placeholder="Enter your age" />
+
+      <button type="submit">Submit Form</button>
+    </form>
+
+    <div class="box" id="result3">
+      Submitted values will appear here.
+    </div>
+
+    <div class="code-box" id="output3">
+      Code will appear here...
+    </div>
+
+    <!-- =========================
+         PART 4 - Validation
+    ========================== -->
+
+    <h2>Part 4 - Form Validation</h2>
+
+    <form id="form4">
+      <label>
+        Name:
+        <span class="error" id="name-err"></span>
+      </label>
+
+      <input
+        type="text"
+        id="v-name"
+        placeholder="Enter your name"
+      />
+
+      <label>
+        Email:
+        <span class="error" id="email-err"></span>
+      </label>
+
+      <input
+        type="email"
+        id="v-email"
+        placeholder="Enter your email"
+      />
+
+      <button type="submit">Submit with Validation</button>
+    </form>
+
+    <div class="box" id="result4">
+      Validation result will appear here.
+    </div>
+
+    <div class="code-box" id="output4">
+      Code will appear here...
+    </div>
+
+    <script>
+      // =====================================
+      // PART 1 - No preventDefault()
+      // =====================================
+
+      // This form has no event listener.
+      // When you click submit, the browser reloads the page.
+
+      // =====================================
+      // PART 2 - preventDefault()
+      // =====================================
+
+      const form2 = document.getElementById("form2");
+
+      form2.addEventListener("submit", function (event) {
+        // Stop the page from reloading
+        event.preventDefault();
+
+        // Get the input value
+        const name = document.getElementById("name-input").value;
+
+        // Show result on the page
+        document.getElementById("result2").innerHTML =
+          "Form submitted successfully! Name: <b>" +
+          name +
+          "</b>. The page did not reload.";
+
+        document.getElementById("result2").style.background = "lightgreen";
+
+        // Show example code
+        document.getElementById("output2").textContent =
+`form.addEventListener("submit", function(event) {
+  event.preventDefault();
+
+  // Your code goes here
+});`;
+      });
+
+      // =====================================
+      // PART 3 - Read Form Values
+      // =====================================
+
+      const form3 = document.getElementById("form3");
+
+      form3.addEventListener("submit", function (event) {
+        // Stop page reload
+        event.preventDefault();
+
+        // Get values from all inputs
+        const name = document.getElementById("f-name").value;
+        const email = document.getElementById("f-email").value;
+        const age = document.getElementById("f-age").value;
+
+        // Show the values
+        document.getElementById("result3").innerHTML =
+          "Form data received:<br><br>" +
+          "Name: <b>" +
+          name +
+          "</b><br>" +
+          "Email: <b>" +
+          email +
+          "</b><br>" +
+          "Age: <b>" +
+          age +
+          "</b>";
+
+        document.getElementById("result3").style.background = "lightgreen";
+
+        // Show code example
+        document.getElementById("output3").textContent =
+`form.addEventListener("submit", function(event) {
+  event.preventDefault();
+
+  const name = document.getElementById("f-name").value;
+  const email = document.getElementById("f-email").value;
+  const age = document.getElementById("f-age").value;
+
+  // Use these values here
+});`;
+      });
+
+      // =====================================
+      // PART 4 - Validation
+      // =====================================
+
+      const form4 = document.getElementById("form4");
+
+      form4.addEventListener("submit", function (event) {
+        // Stop page reload
+        event.preventDefault();
+
+        // Get and clean the values
+        const name = document.getElementById("v-name").value.trim();
+        const email = document.getElementById("v-email").value.trim();
+
+        // Clear old errors
+        document.getElementById("name-err").textContent = "";
+        document.getElementById("email-err").textContent = "";
+
+        let isValid = true;
+
+        // Check if name is empty
+        if (name === "") {
+          document.getElementById("name-err").textContent =
+            "Name is required";
+          isValid = false;
+        }
+
+        // Check if email is empty
+        if (email === "") {
+          document.getElementById("email-err").textContent =
+            "Email is required";
+          isValid = false;
+        }
+
+        // If everything is correct
+        if (isValid) {
+          document.getElementById("result4").innerHTML =
+            '<span class="success">Form is valid and submitted successfully!</span><br><br>' +
+            "Name: <b>" +
+            name +
+            "</b><br>Email: <b>" +
+            email +
+            "</b>";
+
+          document.getElementById("result4").style.background =
+            "lightgreen";
+        } else {
+          document.getElementById("result4").innerHTML =
+            "Please fix the errors before submitting.";
+
+          document.getElementById("result4").style.background = "#ffd6d6";
+        }
+
+        // Show example code
+        document.getElementById("output4").textContent =
+`form.addEventListener("submit", function(event) {
+  event.preventDefault();
+
+  let isValid = true;
+
+  if (name === "") {
+    isValid = false;
+  }
+
+  if (email === "") {
+    isValid = false;
+  }
+
+  if (isValid) {
+    // Submit the form
+  }
+});`;
+      });
+    </script>
+  </body>
+</html>

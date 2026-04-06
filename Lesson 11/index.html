@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lesson 11 - Events</title>
+
+    <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        padding: 30px;
+        background: #f5f5f5;
+      }
+
+      h1,
+      h2 {
+        color: #333;
+      }
+
+      button,
+      input {
+        padding: 10px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        font-size: 16px;
+      }
+
+      .box {
+        background: white;
+        padding: 15px;
+        margin-top: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        min-height: 30px;
+      }
+
+      .code-box {
+        background: black;
+        color: lime;
+        padding: 15px;
+        font-family: monospace;
+        font-size: 14px;
+        margin-top: 10px;
+        margin-bottom: 20px;
+        min-height: 60px;
+        white-space: pre-wrap;
+      }
+
+      #hover-box {
+        width: 250px;
+        text-align: center;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Lesson 11 - Events</h1>
+
+    <p>
+      When the user does something like clicking, typing, or pressing a key,
+      JavaScript can detect it and react.
+    </p>
+
+    <p>
+      <b>addEventListener()</b> is used to listen for events. In React, it is
+      similar to <b>onClick</b>, <b>onChange</b>, and <b>onKeyDown</b>.
+    </p>
+
+    <!-- ========================= -->
+    <!-- PART 1 - CLICK EVENT -->
+    <!-- ========================= -->
+
+    <h2>Part 1 - Click Event</h2>
+
+    <button id="myBtn">Click Me!</button>
+    <button id="myBtn2">Double Click Me!</button>
+
+    <div class="box" id="click-result">Nothing happened yet.</div>
+
+    <div class="code-box" id="output">Code will appear here.</div>
+
+    <!-- ========================= -->
+    <!-- PART 2 - INPUT EVENT -->
+    <!-- ========================= -->
+
+    <h2>Part 2 - Input Event</h2>
+
+    <p>
+      The input event runs every time the user types something. In React, this
+      is similar to onChange.
+    </p>
+
+    <input
+      type="text"
+      id="myInput"
+      placeholder="Type something here..."
+    />
+
+    <div class="box" id="input-result">Type something above.</div>
+
+    <div class="code-box" id="output2">Code will appear here.</div>
+
+    <!-- ========================= -->
+    <!-- PART 3 - KEYDOWN EVENT -->
+    <!-- ========================= -->
+
+    <h2>Part 3 - Keydown Event</h2>
+
+    <input type="text" id="keyInput" placeholder="Press any key..." />
+
+    <div class="box" id="key-result">Press any key above.</div>
+
+    <div class="code-box" id="output3">Code will appear here.</div>
+
+    <!-- ========================= -->
+    <!-- PART 4 - MOUSE EVENTS -->
+    <!-- ========================= -->
+
+    <h2>Part 4 - Mouseover and Mouseout</h2>
+
+    <div class="box" id="hover-box">
+      Move your mouse over this box.
+    </div>
+
+    <div class="code-box" id="output4">Code will appear here.</div>
+
+    <script>
+      // addEventListener format:
+      // element.addEventListener("eventName", function)
+
+      // =========================
+      // PART 1 - CLICK EVENT
+      // =========================
+
+      let clickCount = 0;
+
+      const btn = document.getElementById("myBtn");
+      const btn2 = document.getElementById("myBtn2");
+
+      btn.addEventListener("click", function () {
+        clickCount++;
+
+        const result = document.getElementById("click-result");
+
+        result.innerHTML = "Clicked! Total clicks: " + clickCount;
+        result.style.background = "lightgreen";
+
+        document.getElementById("output").innerHTML =
+          "btn.addEventListener('click', function () {\n" +
+          "  clickCount++;\n" +
+          "  result.innerHTML = 'Clicked!';\n" +
+          "});\n\n" +
+          "// React version:\n" +
+          "// <button onClick={handleClick}>Click Me</button>";
+      });
+
+      btn2.addEventListener("dblclick", function () {
+        const result = document.getElementById("click-result");
+
+        result.innerHTML = "Double click detected!";
+        result.style.background = "pink";
+        
+        document.getElementById("output").innerHTML =
+          "btn2.addEventListener('dblclick', function () {\n" +
+          "  result.innerHTML = 'Double click detected!';\n" +
+          "});\n\n" +
+          "// 'click' = single click\n" +
+          "// 'dblclick' = double click";
+      });
+
+      // =========================
+      // PART 2 - INPUT EVENT
+      // =========================
+
+      const myInput = document.getElementById("myInput");
+
+      myInput.addEventListener("input", function () {
+        const value = myInput.value;
+
+        const result = document.getElementById("input-result");
+
+        result.innerHTML = "You typed: <b>" + value + "</b>";
+
+        document.getElementById("output2").innerHTML =
+          "myInput.addEventListener('input', function () {\n" +
+          "  let value = myInput.value;\n" +
+          "  // Current value: '" +
+          value +
+          "'\n" +
+          "});\n\n" +
+          "// React version:\n" +
+          "// <input onChange={(e) => setValue(e.target.value)} />";
+      });
+
+      // =========================
+      // PART 3 - KEYDOWN EVENT
+      // =========================
+
+      const keyInput = document.getElementById("keyInput");
+
+      keyInput.addEventListener("keydown", function (event) {
+        const pressedKey = event.key;
+
+        const result = document.getElementById("key-result");
+
+        if (pressedKey === "Enter") {
+          result.innerHTML =
+            "ENTER key pressed! Value: " + keyInput.value;
+          result.style.background = "lightgreen";
+        } else if (pressedKey === "Backspace") {
+          result.innerHTML = "Backspace key pressed!";
+          result.style.background = "lightyellow";
+        } else {
+          result.innerHTML = "Key pressed: <b>" + pressedKey + "</b>";
+          result.style.background = "white";
+        }
+
+        document.getElementById("output3").innerHTML =
+          "keyInput.addEventListener('keydown', function (event) {\n" +
+          "  let pressedKey = event.key;\n" +
+          "  // Pressed key: '" +
+          pressedKey +
+          "'\n\n" +
+          "  if (pressedKey === 'Enter') {\n" +
+          "    // Run code when Enter is pressed\n" +
+          "  }\n" +
+          "});\n\n" +
+          "// React version:\n" +
+          "// onKeyDown={(e) => {\n" +
+          "//   if (e.key === 'Enter') {\n" +
+          "//     // do something\n" +
+          "//   }\n" +
+          "// }}";
+      });
+
+      // =========================
+      // PART 4 - MOUSE EVENTS
+      // =========================
+
+      const hoverBox = document.getElementById("hover-box");
+
+      hoverBox.addEventListener("mouseover", function () {
+        hoverBox.style.background = "lightblue";
+        hoverBox.innerHTML = "Mouse is inside the box.";
+
+        document.getElementById("output4").innerHTML =
+          "hoverBox.addEventListener('mouseover', function () {\n" +
+          "  hoverBox.style.background = 'lightblue';\n" +
+          "});\n\n" +
+          "// React version:\n" +
+          "// onMouseOver={handleMouseOver}";
+      });
+
+      hoverBox.addEventListener("mouseout", function () {
+        hoverBox.style.background = "white";
+        hoverBox.innerHTML = "Mouse left the box.";
+
+        document.getElementById("output4").innerHTML =
+          "hoverBox.addEventListener('mouseout', function () {\n" +
+          "  hoverBox.style.background = 'white';\n" +
+          "});\n\n" +
+          "// React version:\n" +
+          "// onMouseOut={handleMouseOut}";
+      });
+    </script>
+  </body>
+</html>
