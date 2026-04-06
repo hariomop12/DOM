@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lesson 8 - classList</title>
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 30px;
+        background: #f5f5f5;
+      }
+
+      h2 {
+        margin-top: 40px;
+        color: #333;
+      }
+
+      button {
+        padding: 10px 20px;
+        margin: 5px;
+        font-size: 15px;
+        cursor: pointer;
+      }
+
+      .box {
+        padding: 20px;
+        margin: 10px 0;
+        width: 280px;
+        font-size: 16px;
+        background: lightblue;
+        transition: all 0.3s;
+      }
+
+      .active {
+        background: limegreen;
+        color: white;
+        font-weight: bold;
+      }
+
+      .danger {
+        background: salmon;
+        color: white;
+      }
+
+      .big {
+        font-size: 24px;
+        padding: 30px;
+      }
+
+      .rounded {
+        border-radius: 20px;
+      }
+
+      .output {
+        background: black;
+        color: lime;
+        padding: 15px;
+        font-family: monospace;
+        font-size: 14px;
+        margin-top: 10px;
+        min-height: 50px;
+        white-space: pre-wrap;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Lesson 8 - classList</h1>
+
+    <p>
+      Before we used <code>style.*</code> to add CSS directly.
+      Now we use <code>classList</code> to add or remove CSS classes.
+    </p>
+
+    <p>
+      In real projects, <code>classList</code> is used more than
+      <code>style.*</code>.
+    </p>
+
+    <!-- =========================
+         PART 1 - add() and remove()
+    ========================== -->
+
+    <h2>Part 1 - add() and remove()</h2>
+
+    <div class="box" id="box1">I am one box</div>
+
+    <button onclick="addClass()">classList.add('active')</button>
+    <button onclick="removeClass()">classList.remove('active')</button>
+    <button onclick="addMultiple()">Add multiple classes</button>
+    <button onclick="resetPart1()">Reset</button>
+
+    <div id="output1" class="output">// Click any button</div>
+
+    <!-- =========================
+         PART 2 - toggle()
+    ========================== -->
+
+    <h2>Part 2 - toggle() - on / off switch</h2>
+
+    <div class="box" id="box2">Toggle me!</div>
+
+    <button onclick="toggleActive()">toggle('active')</button>
+    <button onclick="toggleDanger()">toggle('danger')</button>
+    <button onclick="toggleBig()">toggle('big')</button>
+    <button onclick="toggleRounded()">toggle('rounded')</button>
+
+    <div id="output2" class="output">// Click any button</div>
+
+    <!-- =========================
+         PART 3 - contains()
+    ========================== -->
+
+    <h2>Part 3 - contains() - check class</h2>
+
+    <div class="box active" id="box3">
+      I already have the "active" class
+    </div>
+
+    <button onclick="checkActive()">contains('active')?</button>
+    <button onclick="checkDanger()">contains('danger')?</button>
+    <button onclick="smartToggle()">Smart Toggle</button>
+
+    <div id="output3" class="output">// Click any button</div>
+
+    <!-- =========================
+         PART 4 - style.* vs classList
+    ========================== -->
+
+    <h2>Part 4 - style.* vs classList</h2>
+
+    <div class="box" id="box4">What should we use?</div>
+
+    <button onclick="useStyle()">Use style.*</button>
+    <button onclick="useClassList()">Use classList</button>
+    <button onclick="resetPart4()">Reset</button>
+
+    <div id="output4" class="output">// Click any button</div>
+
+    <script>
+      // =========================
+      // PART 1 - add() and remove()
+      // =========================
+
+      function addClass() {
+        let box = document.getElementById("box1");
+
+        // Add one class
+        box.classList.add("active");
+
+        document.getElementById("output1").innerHTML =
+          "box.classList.add('active')\n" +
+          "// 'active' class is added\n" +
+          "// Now box class = 'box active'";
+      }
+
+      function removeClass() {
+        let box = document.getElementById("box1");
+
+        // Remove one class
+        box.classList.remove("active");
+
+        document.getElementById("output1").innerHTML =
+          "box.classList.remove('active')\n" +
+          "// 'active' class is removed\n" +
+          "// Now box class = 'box'";
+      }
+
+      function addMultiple() {
+        let box = document.getElementById("box1");
+
+        // Add many classes in one line
+        box.classList.add("danger", "big", "rounded");
+
+        document.getElementById("output1").innerHTML =
+          "box.classList.add('danger', 'big', 'rounded')\n" +
+          "// 3 classes added at the same time";
+      }
+
+      function resetPart1() {
+        let box = document.getElementById("box1");
+
+        // Remove all extra classes
+        box.className = "box";
+
+        document.getElementById("output1").innerHTML =
+          "// Reset done\n// Only 'box' class is left";
+      }
+
+      // =========================
+      // PART 2 - toggle()
+      // =========================
+
+      function toggleActive() {
+        let box = document.getElementById("box2");
+
+        // If class exists, remove it
+        // If class does not exist, add it
+        box.classList.toggle("active");
+
+        document.getElementById("output2").innerHTML =
+          "box.classList.toggle('active')\n" +
+          "// 'active' class switched on / off";
+      }
+
+      function toggleDanger() {
+        let box = document.getElementById("box2");
+
+        box.classList.toggle("danger");
+
+        document.getElementById("output2").innerHTML =
+          "box.classList.toggle('danger')\n" +
+          "// 'danger' class switched on / off";
+      }
+
+      function toggleBig() {
+        let box = document.getElementById("box2");
+
+        box.classList.toggle("big");
+
+        document.getElementById("output2").innerHTML =
+          "box.classList.toggle('big')\n" +
+          "// Box size changed";
+      }
+
+      function toggleRounded() {
+        let box = document.getElementById("box2");
+
+        box.classList.toggle("rounded");
+
+        document.getElementById("output2").innerHTML =
+          "box.classList.toggle('rounded')\n" +
+          "// Border radius switched on / off";
+      }
+
+      // =========================
+      // PART 3 - contains()
+      // =========================
+
+      function checkActive() {
+        let box = document.getElementById("box3");
+
+        // contains() returns true or false
+        let result = box.classList.contains("active");
+
+        document.getElementById("output3").innerHTML =
+          "box.classList.contains('active')\n" +
+          "// Result = " +
+          result +
+          "\n" +
+          "// true means class exists";
+      }
+
+      function checkDanger() {
+        let box = document.getElementById("box3");
+
+        let result = box.classList.contains("danger");
+
+        document.getElementById("output3").innerHTML =
+          "box.classList.contains('danger')\n" +
+          "// Result = " +
+          result +
+          "\n" +
+          "// false means class does not exist";
+      }
+
+      function smartToggle() {
+        let box = document.getElementById("box3");
+
+        // First check if 'active' class exists
+        if (box.classList.contains("active")) {
+          // Remove active and add danger
+          box.classList.remove("active");
+          box.classList.add("danger");
+
+          document.getElementById("output3").innerHTML =
+            "if (box.classList.contains('active')) {\n" +
+            "   box.classList.remove('active')\n" +
+            "   box.classList.add('danger')\n" +
+            "}\n" +
+            "// 'active' removed and 'danger' added";
+        } else {
+          // Remove danger and add active
+          box.classList.remove("danger");
+          box.classList.add("active");
+
+          document.getElementById("output3").innerHTML =
+            "else {\n" +
+            "   box.classList.remove('danger')\n" +
+            "   box.classList.add('active')\n" +
+            "}\n" +
+            "// 'danger' removed and 'active' added";
+        }
+      }
+
+      // =========================
+      // PART 4 - style.* vs classList
+      // =========================
+
+      function useStyle() {
+        let box = document.getElementById("box4");
+
+        // Change style directly from JavaScript
+        box.style.backgroundColor = "violet";
+        box.style.color = "white";
+        box.style.borderRadius = "15px";
+        box.style.fontSize = "20px";
+
+        document.getElementById("output4").innerHTML =
+          "box.style.backgroundColor = 'violet'\n" +
+          "box.style.color = 'white'\n" +
+          "box.style.borderRadius = '15px'\n" +
+          "box.style.fontSize = '20px'\n\n" +
+          "// style.* is good for small changes";
+      }
+
+      function useClassList() {
+        let box = document.getElementById("box4");
+
+        // Remove old inline styles
+        box.style.cssText = "";
+
+        // Add ready-made CSS classes
+        box.classList.add("active", "big", "rounded");
+
+        document.getElementById("output4").innerHTML =
+          "box.classList.add('active', 'big', 'rounded')\n\n" +
+          "// classList is shorter and cleaner\n" +
+          "// Real projects use this more";
+      }
+
+      function resetPart4() {
+        let box = document.getElementById("box4");
+
+        // Remove all classes and styles
+        box.className = "box";
+        box.style.cssText = "";
+
+        document.getElementById("output4").innerHTML =
+          "// Reset done\n// Box is back to normal";
+      }
+    </script>
+  </body>
+</html>
