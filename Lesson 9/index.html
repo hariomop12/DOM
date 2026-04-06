@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lesson 9 - Attributes</title>
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 30px;
+        background: #f5f5f5;
+      }
+
+      h1 {
+        color: #222;
+      }
+
+      h2 {
+        margin-top: 40px;
+        color: #333;
+      }
+
+      p {
+        color: #555;
+      }
+
+      button {
+        padding: 10px 20px;
+        margin: 5px;
+        font-size: 15px;
+        cursor: pointer;
+      }
+
+      input {
+        padding: 8px 12px;
+        font-size: 15px;
+        margin: 5px;
+        width: 220px;
+      }
+
+      .box {
+        background: white;
+        border: 2px solid #ccc;
+        padding: 15px;
+        margin: 10px 0;
+      }
+
+      .output {
+        background: black;
+        color: lime;
+        padding: 15px;
+        font-family: monospace;
+        font-size: 14px;
+        margin-top: 10px;
+        min-height: 50px;
+        white-space: pre-wrap;
+      }
+
+      img {
+        border: 2px solid #ccc;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Lesson 9 - getAttribute(), setAttribute(), removeAttribute()</h1>
+
+    <p>
+      We can read attributes like class, id, href, src, and disabled using
+      JavaScript. We can also change or remove them.
+    </p>
+
+    <!-- ===================================
+         PART 1 - getAttribute()
+         Read an attribute value
+    ==================================== -->
+
+    <h2>Part 1 - getAttribute()</h2>
+
+    <a
+      href="https://google.com"
+      id="myLink"
+      target="_blank"
+      class="link-style"
+    >
+      Go to Google
+    </a>
+
+    <br /><br />
+
+    <button onclick="getHref()">Get href</button>
+    <button onclick="getTarget()">Get target</button>
+    <button onclick="getClassName()">Get class</button>
+    <button onclick="getId()">Get id</button>
+
+    <div id="output" class="output">// Click a button</div>
+
+    <!-- ===================================
+         PART 2 - setAttribute()
+         Change or add an attribute
+    ==================================== -->
+
+    <h2>Part 2 - setAttribute()</h2>
+
+    <a href="https://google.com" id="myLink2">Now go to Google</a>
+
+    <br /><br />
+
+    <img
+      id="myImg"
+      src="https://picsum.photos/150/100?random=1"
+      alt="First image"
+    />
+
+    <br /><br />
+
+    <button onclick="changeLinkHref()">Change Link</button>
+    <button onclick="changeImgSrc()">Change Image</button>
+    <button onclick="changeImgAlt()">Change Image Alt</button>
+    <button onclick="resetPart2()">Reset</button>
+
+    <div id="output2" class="output">// Click a button</div>
+
+    <!-- ===================================
+         PART 3 - removeAttribute() and hasAttribute()
+    ==================================== -->
+
+    <h2>Part 3 - removeAttribute() and hasAttribute()</h2>
+
+    <input
+      type="text"
+      id="myInput"
+      placeholder="Right now I am disabled"
+      disabled
+    />
+
+    <button id="myBtn" disabled onclick="doNothing()">
+      I am disabled
+    </button>
+
+    <br /><br />
+
+    <button onclick="enableInput()">Enable Input</button>
+    <button onclick="disableInput()">Disable Input</button>
+    <button onclick="checkDisabled()">Check Disabled</button>
+    <button onclick="enableBtn()">Enable Button</button>
+
+    <div id="output3" class="output">// Click a button</div>
+
+    <!-- ===================================
+         PART 4 - data-* custom attributes
+    ==================================== -->
+
+    <h2>Part 4 - data-* Custom Attributes</h2>
+
+    <p>You can store your own custom data inside an element.</p>
+
+    <div
+      id="card1"
+      class="box"
+      data-name="Rahul"
+      data-age="22"
+      data-city="Indore"
+    >
+      I am a card. I have custom data attributes.
+    </div>
+
+    <button onclick="readDataName()">Read Name</button>
+    <button onclick="readDataAge()">Read Age</button>
+    <button onclick="setDataCity()">Change City</button>
+    <button onclick="readAllData()">Read All Data</button>
+
+    <div id="output4" class="output">// Click a button</div>
+
+    <script>
+      // =========================
+      // PART 1 - getAttribute()
+      // =========================
+
+      function getHref() {
+        const link = document.getElementById("myLink");
+        const href = link.getAttribute("href");
+
+        document.getElementById("output").innerHTML =
+          "link.getAttribute('href')\n" + "= '" + href + "'";
+      }
+
+      function getTarget() {
+        const link = document.getElementById("myLink");
+        const target = link.getAttribute("target");
+
+        document.getElementById("output").innerHTML =
+          "link.getAttribute('target')\n" +
+          "= '" +
+          target +
+          "'\n\n" +
+          "_blank means the link opens in a new tab.";
+      }
+
+      function getClassName() {
+        const link = document.getElementById("myLink");
+        const className = link.getAttribute("class");
+
+        document.getElementById("output").innerHTML =
+          "link.getAttribute('class')\n" + "= '" + className + "'";
+      }
+
+      function getId() {
+        const link = document.getElementById("myLink");
+        const id = link.getAttribute("id");
+
+        document.getElementById("output").innerHTML =
+          "link.getAttribute('id')\n" + "= '" + id + "'";
+      }
+
+      // =========================
+      // PART 2 - setAttribute()
+      // =========================
+
+      function changeLinkHref() {
+        const link = document.getElementById("myLink2");
+
+        link.setAttribute("href", "https://youtube.com");
+        link.innerHTML = "Now go to YouTube";
+
+        document.getElementById("output2").innerHTML =
+          "link.setAttribute('href', 'https://youtube.com')\n" +
+          "The link now opens YouTube.";
+      }
+
+      function changeImgSrc() {
+        const img = document.getElementById("myImg");
+
+        img.setAttribute("src", "https://picsum.photos/150/100?random=5");
+
+        document.getElementById("output2").innerHTML =
+          "img.setAttribute('src', 'https://picsum.photos/150/100?random=5')\n" +
+          "The image has changed.";
+      }
+
+      function changeImgAlt() {
+        const img = document.getElementById("myImg");
+
+        img.setAttribute("alt", "Changed image");
+
+        document.getElementById("output2").innerHTML =
+          "img.setAttribute('alt', 'Changed image')\n" +
+          "The alt text has changed.";
+      }
+
+      function resetPart2() {
+        const link = document.getElementById("myLink2");
+        const img = document.getElementById("myImg");
+
+        link.setAttribute("href", "https://google.com");
+        link.innerHTML = "Now go to Google";
+
+        img.setAttribute("src", "https://picsum.photos/150/100?random=1");
+        img.setAttribute("alt", "First image");
+
+        document.getElementById("output2").innerHTML =
+          "Everything has been reset.";
+      }
+
+      // =========================
+      // PART 3 - removeAttribute() and hasAttribute()
+      // =========================
+
+      function doNothing() {
+        // This function does nothing.
+      }
+
+      function enableInput() {
+        const input = document.getElementById("myInput");
+
+        input.removeAttribute("disabled");
+
+        document.getElementById("output3").innerHTML =
+          "input.removeAttribute('disabled')\n" +
+          "The input is now enabled.";
+      }
+
+      function disableInput() {
+        const input = document.getElementById("myInput");
+
+        input.setAttribute("disabled", "");
+
+        document.getElementById("output3").innerHTML =
+          "input.setAttribute('disabled', '')\n" +
+          "The input is now disabled.";
+      }
+
+      function checkDisabled() {
+        const input = document.getElementById("myInput");
+        const isDisabled = input.hasAttribute("disabled");
+
+        document.getElementById("output3").innerHTML =
+          "input.hasAttribute('disabled')\n" +
+          "= " +
+          isDisabled +
+          "\n\n" +
+          "true = disabled\n" +
+          "false = enabled";
+      }
+
+      function enableBtn() {
+        const btn = document.getElementById("myBtn");
+
+        btn.removeAttribute("disabled");
+        btn.innerHTML = "Click Me";
+
+        btn.onclick = function () {
+          alert("Now the button works!");
+        };
+
+        document.getElementById("output3").innerHTML =
+          "btn.removeAttribute('disabled')\n" +
+          "The button is now enabled.";
+      }
+
+      // =========================
+      // PART 4 - data-* attributes
+      // =========================
+
+      function readDataName() {
+        const card = document.getElementById("card1");
+
+        const name = card.dataset.name;
+        const name2 = card.getAttribute("data-name");
+
+        document.getElementById("output4").innerHTML =
+          "card.dataset.name\n" +
+          "= '" +
+          name +
+          "'\n\n" +
+          "card.getAttribute('data-name')\n" +
+          "= '" +
+          name2 +
+          "'";
+      }
+
+      function readDataAge() {
+        const card = document.getElementById("card1");
+        const age = card.dataset.age;
+
+        document.getElementById("output4").innerHTML =
+          "card.dataset.age\n" + "= '" + age + "'";
+      }
+
+      function setDataCity() {
+        const card = document.getElementById("card1");
+
+        card.dataset.city = "Mumbai";
+
+        document.getElementById("output4").innerHTML =
+          "card.dataset.city = 'Mumbai'\n" +
+          "The city changed from Indore to Mumbai.";
+      }
+
+      function readAllData() {
+        const card = document.getElementById("card1");
+
+        document.getElementById("output4").innerHTML =
+          "data-name = '" +
+          card.dataset.name +
+          "'\n" +
+          "data-age = '" +
+          card.dataset.age +
+          "'\n" +
+          "data-city = '" +
+          card.dataset.city +
+          "'\n\n" +
+          "data-* attributes are useful in real projects.";
+      }
+    </script>
+  </body>
+</html>

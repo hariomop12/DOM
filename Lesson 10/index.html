@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lesson 10 - DOM Add and Remove</title>
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 30px;
+        background: #f5f5f5;
+      }
+
+      h1 {
+        color: #222;
+      }
+
+      h2 {
+        margin-top: 40px;
+        color: #333;
+      }
+
+      button {
+        padding: 10px 20px;
+        margin: 5px;
+        font-size: 15px;
+        cursor: pointer;
+      }
+
+      #output,
+      #output2,
+      #output3,
+      #output4 {
+        background: black;
+        color: lime;
+        padding: 15px;
+        font-family: monospace;
+        font-size: 14px;
+        margin-top: 10px;
+        min-height: 50px;
+        white-space: pre-wrap;
+      }
+
+      .child {
+        background: lightblue;
+        padding: 10px;
+        margin: 5px 0;
+        font-size: 15px;
+      }
+
+      .new-item {
+        background: lightgreen;
+        padding: 10px;
+        margin: 5px 0;
+        font-size: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .parent-box {
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Lesson 10 - appendChild, prepend, remove, removeChild</h1>
+    <p>Add or remove elements in the DOM.</p>
+
+    <!-- PART 1 -->
+    <h2>Part 1 - appendChild() vs prepend()</h2>
+
+    <div id="parent1" class="parent-box">
+      <div class="child">Child 1 - already here</div>
+      <div class="child">Child 2 - already here</div>
+    </div>
+
+    <button onclick="appendItem()">appendChild() - Add at End</button>
+    <button onclick="prependItem()">prepend() - Add at Start</button>
+    <button onclick="resetPart1()">Reset</button>
+
+    <div id="output">// Click a button</div>
+
+    <!-- PART 2 -->
+    <h2>Part 2 - remove() vs removeChild()</h2>
+
+    <div class="parent-box" id="parent2">
+      <div class="child" id="child-a">Child A - remove() will remove this</div>
+      <div class="child" id="child-b">
+        Child B - removeChild() will remove this
+      </div>
+      <div class="child" id="child-c">Child C - stays here</div>
+    </div>
+
+    <button onclick="removeItem()">remove() - Remove Child A</button>
+    <button onclick="removeChildItem()">
+      removeChild() - Remove Child B
+    </button>
+    <button onclick="resetPart2()">Reset</button>
+
+    <div id="output2">// Click a button</div>
+
+    <!-- PART 3 -->
+    <h2>Part 3 - insertBefore()</h2>
+
+    <div class="parent-box" id="parent3">
+      <div class="child" id="ref-child">
+        Reference Element - New item comes before me
+      </div>
+    </div>
+
+    <button onclick="insertBeforeItem()">Insert Before</button>
+    <button onclick="resetPart3()">Reset</button>
+
+    <div id="output3">// Click the button</div>
+
+    <!-- PART 4 -->
+    <h2>Part 4 - Mini Todo List</h2>
+
+    <input
+      type="text"
+      id="todo-input"
+      placeholder="Write something..."
+      style="padding: 8px 12px; font-size: 15px; width: 220px"
+    />
+
+    <button onclick="addTodo()">Add Todo</button>
+
+    <div class="parent-box" id="todo-list">
+      <p id="empty-msg" style="color: #999; font-family: monospace">
+        // No items yet...
+      </p>
+    </div>
+
+    <div id="output4">// Write something and click Add Todo</div>
+
+    <script>
+      // =========================
+      // PART 1 - appendChild vs prepend
+      // =========================
+
+      let appendCount = 0;
+      let prependCount = 0;
+
+      function appendItem() {
+        appendCount++;
+
+        const newDiv = document.createElement("div");
+        newDiv.className = "new-item";
+        newDiv.textContent = "Added with appendChild() #" + appendCount;
+
+        const parent = document.getElementById("parent1");
+
+        // appendChild adds at the end
+        parent.appendChild(newDiv);
+
+        document.getElementById("output").textContent =
+          "appendChild() adds the new element at the end.";
+      }
+
+      function prependItem() {
+        prependCount++;
+
+        const newDiv = document.createElement("div");
+        newDiv.className = "new-item";
+        newDiv.style.background = "lightyellow";
+        newDiv.textContent = "Added with prepend() #" + prependCount;
+
+        const parent = document.getElementById("parent1");
+
+        // prepend adds at the beginning
+        parent.prepend(newDiv);
+
+        document.getElementById("output").textContent =
+          "prepend() adds the new element at the beginning.";
+      }
+
+      function resetPart1() {
+        appendCount = 0;
+        prependCount = 0;
+
+        document.getElementById("parent1").innerHTML = `
+          <div class="child">Child 1 - already here</div>
+          <div class="child">Child 2 - already here</div>
+        `;
+
+        document.getElementById("output").textContent = "// Reset complete";
+      }
+
+      // =========================
+      // PART 2 - remove vs removeChild
+      // =========================
+
+      function removeItem() {
+        const childA = document.getElementById("child-a");
+
+        if (!childA) {
+          document.getElementById("output2").textContent =
+            "Child A is already removed.";
+          return;
+        }
+
+        // remove() removes the element directly
+        childA.remove();
+
+        document.getElementById("output2").textContent =
+          "remove() removed Child A directly.";
+      }
+
+      function removeChildItem() {
+        const parent = document.getElementById("parent2");
+        const childB = document.getElementById("child-b");
+
+        if (!childB) {
+          document.getElementById("output2").textContent =
+            "Child B is already removed.";
+          return;
+        }
+
+        // removeChild() removes a child from its parent
+        parent.removeChild(childB);
+
+        document.getElementById("output2").textContent =
+          "removeChild() removed Child B from the parent.";
+      }
+
+      function resetPart2() {
+        document.getElementById("parent2").innerHTML = `
+          <div class="child" id="child-a">Child A - remove() will remove this</div>
+          <div class="child" id="child-b">Child B - removeChild() will remove this</div>
+          <div class="child" id="child-c">Child C - stays here</div>
+        `;
+
+        document.getElementById("output2").textContent = "// Reset complete";
+      }
+
+      // =========================
+      // PART 3 - insertBefore
+      // =========================
+
+      let insertCount = 0;
+
+      function insertBeforeItem() {
+        insertCount++;
+
+        const newDiv = document.createElement("div");
+        newDiv.className = "new-item";
+        newDiv.textContent = "Inserted before reference #" + insertCount;
+
+        const parent = document.getElementById("parent3");
+        const refChild = document.getElementById("ref-child");
+
+        // insertBefore(newElement, referenceElement)
+        parent.insertBefore(newDiv, refChild);
+
+        document.getElementById("output3").textContent =
+          "insertBefore() added the new element before the reference element.";
+      }
+
+      function resetPart3() {
+        insertCount = 0;
+
+        document.getElementById("parent3").innerHTML = `
+          <div class="child" id="ref-child">
+            Reference Element - New item comes before me
+          </div>
+        `;
+
+        document.getElementById("output3").textContent = "// Reset complete";
+      }
+
+      // =========================
+      // PART 4 - Todo List
+      // =========================
+
+      let todoCount = 0;
+
+      function addTodo() {
+        const input = document.getElementById("todo-input");
+        const list = document.getElementById("todo-list");
+        const emptyMsg = document.getElementById("empty-msg");
+
+        const text = input.value.trim();
+
+        if (text === "") {
+          alert("Please write something first.");
+          return;
+        }
+
+        // Remove "No items yet" message
+        if (emptyMsg) {
+          emptyMsg.remove();
+        }
+
+        todoCount++;
+
+        // Create todo item
+        const item = document.createElement("div");
+        item.className = "new-item";
+
+        // Create text for the todo
+        const todoText = document.createElement("span");
+        todoText.textContent = todoCount + ". " + text;
+
+        // Create delete button
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "Delete";
+
+        // Remove the todo item when button is clicked
+        deleteBtn.onclick = function () {
+          item.remove();
+
+          // If no items are left, show the message again
+          if (list.children.length === 0) {
+            const msg = document.createElement("p");
+            msg.id = "empty-msg";
+            msg.style.color = "#999";
+            msg.style.fontFamily = "monospace";
+            msg.textContent = "// No items yet...";
+
+            list.appendChild(msg);
+          }
+
+          document.getElementById("output4").textContent =
+            "Todo item deleted.";
+        };
+
+        // Add text and button inside item
+        item.appendChild(todoText);
+        item.appendChild(deleteBtn);
+
+        // Add item into the list
+        list.appendChild(item);
+
+        // Clear input box
+        input.value = "";
+        input.focus();
+
+        document.getElementById("output4").textContent =
+          'New todo added: "' + text + '"';
+      }
+
+      // Add todo when Enter key is pressed
+      document
+        .getElementById("todo-input")
+        .addEventListener("keydown", function (event) {
+          if (event.key === "Enter") {
+            addTodo();
+          }
+        });
+    </script>
+  </body>
+</html>
